@@ -4,13 +4,19 @@ __author__ = "Nicholas Murray"
 
 import klibs
 from klibs import P
+from klibs.KLUserInterface import any_key
+from klibs.KLGraphics import fill, flip
+from klibs.KLCommunication import message
+
 
 # Entire experiment object
 class aether_typing_study_experiment(klibs.Experiment):
 
     # Define all experimental stimuli drawn on the screen
     def setup(self):
-        pass
+        
+        # Text to copy for any given written stimulus
+        self.text_to_copy = "What did you eat for breakfast today?"
 
     # Define block order
     def block(self):
@@ -18,10 +24,20 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     # Define what kind of trial this is
     def trial_prep(self):
-        pass
+        
+        fill()
+        message(
+            self.text_to_copy, 
+            location = P.screen_c, 
+            registration = 5 # centered 
+        )
+        flip()
+        any_key()
 
     # Define trial order of events
     def trial(self):
+
+        
 
         return {
             "block_num": P.block_number,
