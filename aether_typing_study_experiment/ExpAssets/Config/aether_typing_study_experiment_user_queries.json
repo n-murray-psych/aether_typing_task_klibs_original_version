@@ -85,8 +85,8 @@
     ],
     "experimental": [
         {
-            "title": "breakfast_question", 
-            "database_field": "breakfast_question_text_response", 
+            "title": "breakfast_question_response", 
+            "database_field": "text_response", 
             "query": "What did you have for breakfast today?", 
             "accepted": null,
             "allow_null": false, 
