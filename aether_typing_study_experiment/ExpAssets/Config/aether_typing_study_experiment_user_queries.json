@@ -83,5 +83,25 @@
             "active": true
         }
     ],
-    "experimental": null
+    "experimental": [
+        {
+            "title": "breakfast_question", 
+            "database_field": "breakfast_question_text_response", 
+            "query": "What did you have for breakfast today?", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ]
 }

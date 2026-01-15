@@ -6,17 +6,14 @@ import klibs
 from klibs import P
 from klibs.KLUserInterface import any_key
 from klibs.KLGraphics import fill, flip
-from klibs.KLCommunication import message
-
+from klibs.KLCommunication import user_queries, query, query_no_backspace
 
 # Entire experiment object
 class aether_typing_study_experiment(klibs.Experiment):
 
     # Define all experimental stimuli drawn on the screen
     def setup(self):
-        
-        # Text to copy for any given written stimulus
-        self.text_to_copy = "What did you eat for breakfast today?"
+        pass
 
     # Define block order
     def block(self):
@@ -24,24 +21,19 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     # Define what kind of trial this is
     def trial_prep(self):
-        
-        fill()
-        message(
-            self.text_to_copy, 
-            location = P.screen_c, 
-            registration = 5 # centered 
-        )
-        flip()
-        any_key()
+        pass
 
     # Define trial order of events
     def trial(self):
 
-        
+        typed_text = query_no_backspace(
+            user_queries.experimental[0]
+        )
 
         return {
             "block_num": P.block_number,
-            "trial_num": P.trial_number
+            "trial_num": P.trial_number,
+            "breakfast_question_response": typed_text
         }
 
     def trial_clean_up(self):
