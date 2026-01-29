@@ -12,6 +12,7 @@ from klibs.KLJSON_Object import AttributeDict
 from klibs.KLTime import CountDown
 from klibs.KLEventQueue import pump
 from klibs.KLGraphics.KLDraw import Rectangle
+import random
 
 
 class aether_typing_study_experiment(klibs.Experiment):
@@ -86,67 +87,138 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def trial(self):
 
-        # Size of entire spatial working memory task array
-        array_size_deg = 3 # Create little squares for the array that are 1/9 the size of the whole array
-        square_size_deg = array_size_deg / 3
-        square_size_px = int(deg_to_px(square_size_deg))
+        def draw_blank_spatial_search_array(): 
 
-        # Create a white square to base the little squares on
-        white_square = Rectangle(
-            width = square_size_px, 
-            height = square_size_px, 
-            fill = (255, 255, 255), # White fill
-            stroke = [1, (0,0,0)] # Black border
-        )
+            # Size of entire spatial working memory task array
+            array_size_deg = 3 # Create little squares for the array that are 1/9 the size of the whole array
+            square_size_deg = array_size_deg / 3
+            square_size_px = int(deg_to_px(square_size_deg))
 
-        # Draw the centre square
-        def draw_a_square(square_location=None):
-            cx, cy = P.screen_c
-
-            dx, dy = 0, 0
-            step = square_size_px
-
-            if square_location == "1": 
-                dx = -step
-                dy = step
-            elif square_location == "2":
-                dy = step
-            elif square_location == "3":
-                dx = step
-                dy = step
-            elif square_location == "4": 
-                dx = -step
-            elif square_location == "5": 
-                dx = 0
-                dy = 0 # centre square
-            elif square_location == "6": 
-                dx = step
-            elif square_location == "7": 
-                dx = -step
-                dy = -step
-            elif square_location == "8": 
-                dy = -step
-            elif square_location == "9": 
-                dx = step
-                dy = -step
-
-            blit(
-                white_square,
-                registration=5,
-                location=(cx + dx, cy + dy)
+            # Create a white square to base the little squares on
+            white_square = Rectangle(
+                width = square_size_px, 
+                height = square_size_px, 
+                fill = (255, 255, 255), # White fill
+                stroke = [1, (0,0,0)] # Black border
             )
 
-        fill()
-        draw_a_square("1")
-        draw_a_square("2")
-        draw_a_square("3")
-        draw_a_square("4")
-        draw_a_square("5") # Centre square
-        draw_a_square("6")
-        draw_a_square("7")
-        draw_a_square("8")
-        draw_a_square("9")
-        flip()
+            # Draw the centre square
+            def draw_a_square(square_location=None):
+                cx, cy = P.screen_c
+
+                dx, dy = 0, 0
+                step = square_size_px
+
+                if square_location == "1": 
+                    dx = -step
+                    dy = step
+                elif square_location == "2":
+                    dy = step
+                elif square_location == "3":
+                    dx = step
+                    dy = step
+                elif square_location == "4": 
+                    dx = -step
+                elif square_location == "5": 
+                    dx = 0
+                    dy = 0 # centre square
+                elif square_location == "6": 
+                    dx = step
+                elif square_location == "7": 
+                    dx = -step
+                    dy = -step
+                elif square_location == "8": 
+                    dy = -step
+                elif square_location == "9": 
+                    dx = step
+                    dy = -step
+
+                blit(
+                    white_square,
+                    registration=5,
+                    location=(cx + dx, cy + dy)
+                )
+
+            fill()
+            draw_a_square("1")
+            draw_a_square("2")
+            draw_a_square("3")
+            draw_a_square("4")
+            draw_a_square("5") # Centre square
+            draw_a_square("6")
+            draw_a_square("7")
+            draw_a_square("8")
+            draw_a_square("9")
+            flip()
+
+        def draw_spatial_search_array(target_task_array=None):
+            """
+            Draws a 3x3 spatial search array.
+
+            Parameters
+            ----------
+            target_task_array : int or str or None
+                - None  → all squares white
+                - 1–9   → that square is filled black
+            """
+
+            # --- Geometry ---
+            array_size_deg = 3
+            square_size_deg = array_size_deg / 3
+            square_size_px = int(deg_to_px(square_size_deg))
+            step = square_size_px
+
+            # --- Colours ---
+            WHITE = (255, 255, 255)
+            BLACK = (0, 0, 0)
+
+            # Ensure consistent comparison
+            if target_task_array is not None:
+                target_task_array = str(target_task_array)
+
+            # --- Draw one square ---
+            def draw_a_square(square_location):
+
+                fill_colour = BLACK if square_location == target_task_array else WHITE
+
+                single_square = Rectangle(
+                    width=square_size_px,
+                    height=square_size_px,
+                    fill=fill_colour,
+                    stroke=[1, (0, 0, 0)]
+                )
+
+                cx, cy = P.screen_c
+                dx, dy = 0, 0
+
+                if square_location == "1":
+                    dx, dy = -step, step
+                elif square_location == "2":
+                    dy = step
+                elif square_location == "3":
+                    dx, dy = step, step
+                elif square_location == "4":
+                    dx = -step
+                elif square_location == "5":
+                    pass  # centre
+                elif square_location == "6":
+                    dx = step
+                elif square_location == "7":
+                    dx, dy = -step, -step
+                elif square_location == "8":
+                    dy = -step
+                elif square_location == "9":
+                    dx, dy = step, -step
+
+                blit(single_square, registration=5, location=(cx + dx, cy + dy))
+
+            # --- Draw full array ---
+            fill()
+            for i in range(1, 10):
+                draw_a_square(str(i))
+            flip()
+
+        draw_spatial_search_array()
         any_key()
 
         # Call typing_task and capture the response
