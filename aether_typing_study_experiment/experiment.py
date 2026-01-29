@@ -18,19 +18,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     # Define all experimental stimuli drawn on the screen
     def setup(self):
-        pass
-
-    # Define block order
-    def block(self):
-        pass
-
-    # Define what kind of trial this is
-    def trial_prep(self):
-        pass
-
-    # Define trial order of events
-    def trial(self):
-
+        
         typed_text = None # Initialize typed_text as a column in the datafile to be saved from the study
 
         def typing_task():
@@ -109,8 +97,22 @@ class aether_typing_study_experiment(klibs.Experiment):
                 draw_left_fn=draw_left,
                 draw_timer_fn=draw_timer
             )
+
+        self.typing_task = typing_task
+
+    # Define block order
+    def block(self):
+        pass
+
+    # Define what kind of trial this is
+    def trial_prep(self):
+        pass
+
+    # Define trial order of events
+    def trial(self):
         
-        typing_task()
+        # Typing task call for a trial
+        #self.typing_task()
 
         return {
             "block_num": P.block_number,
