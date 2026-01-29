@@ -100,20 +100,35 @@ class aether_typing_study_experiment(klibs.Experiment):
         )
 
         # Draw the centre square
-        def draw_a_square(direction=None):
+        def draw_a_square(square_location=None):
             cx, cy = P.screen_c
 
             dx, dy = 0, 0
-            step = square_size_px // 2
+            step = square_size_px
 
-            if direction == "left":
+            if square_location == "1": 
                 dx = -step
-            elif direction == "right":
-                dx = step
-            elif direction == "up":
-                dy = -step
-            elif direction == "down":
                 dy = step
+            elif square_location == "2":
+                dy = step
+            elif square_location == "3":
+                dx = step
+                dy = step
+            elif square_location == "4": 
+                dx = -step
+            elif square_location == "5": 
+                dx = 0
+                dy = 0 # centre square
+            elif square_location == "6": 
+                dx = step
+            elif square_location == "7": 
+                dx = -step
+                dy = -step
+            elif square_location == "8": 
+                dy = -step
+            elif square_location == "9": 
+                dx = step
+                dy = -step
 
             blit(
                 white_square,
@@ -122,11 +137,15 @@ class aether_typing_study_experiment(klibs.Experiment):
             )
 
         fill()
-        draw_a_square()            # center
-        draw_a_square("left")
-        draw_a_square("right")
-        draw_a_square("up")
-        draw_a_square("down")
+        draw_a_square("1")
+        draw_a_square("2")
+        draw_a_square("3")
+        draw_a_square("4")
+        draw_a_square("5") # Centre square
+        draw_a_square("6")
+        draw_a_square("7")
+        draw_a_square("8")
+        draw_a_square("9")
         flip()
         any_key()
 
