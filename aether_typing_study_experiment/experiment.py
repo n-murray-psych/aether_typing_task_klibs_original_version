@@ -86,9 +86,55 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def trial(self):
 
-        # Call typing_task and capture the response
-        typed_text = self.typing_task()
+        # Size of entire spatial working memory task array
+        array_size_deg = 3 # Create little squares for the array that are 1/9 the size of the whole array
+        square_size_deg = array_size_deg / 3
+        square_size_px = int(deg_to_px(square_size_deg))
 
+        # Create a white square to base the little squares on
+        white_square = Rectangle(
+            width = square_size_px, 
+            height = square_size_px, 
+            fill = (255, 255, 255), # White fill
+            stroke = [1, (0,0,0)] # Black border
+        )
+
+        # Draw the centre square
+        def draw_a_square(direction=None):
+            cx, cy = P.screen_c
+
+            dx, dy = 0, 0
+            step = square_size_px // 2
+
+            if direction == "left":
+                dx = -step
+            elif direction == "right":
+                dx = step
+            elif direction == "up":
+                dy = -step
+            elif direction == "down":
+                dy = step
+
+            blit(
+                white_square,
+                registration=5,
+                location=(cx + dx, cy + dy)
+            )
+
+        fill()
+        draw_a_square()            # center
+        draw_a_square("left")
+        draw_a_square("right")
+        draw_a_square("up")
+        draw_a_square("down")
+        flip()
+        any_key()
+
+        # Call typing_task and capture the response
+        #typed_text = self.typing_task()
+
+        # Set your response variables to NONE when you're testing the development of other tasks.
+        typed_text = None
         return {
             "block_num": P.block_number,
             "trial_num": P.trial_number,
