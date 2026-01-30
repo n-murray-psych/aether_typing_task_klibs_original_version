@@ -87,70 +87,6 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def trial(self):
 
-        def draw_blank_spatial_search_array(): 
-
-            # Size of entire spatial working memory task array
-            array_size_deg = 3 # Create little squares for the array that are 1/9 the size of the whole array
-            square_size_deg = array_size_deg / 3
-            square_size_px = int(deg_to_px(square_size_deg))
-
-            # Create a white square to base the little squares on
-            white_square = Rectangle(
-                width = square_size_px, 
-                height = square_size_px, 
-                fill = (255, 255, 255), # White fill
-                stroke = [1, (0,0,0)] # Black border
-            )
-
-            # Draw the centre square
-            def draw_a_square(square_location=None):
-                cx, cy = P.screen_c
-
-                dx, dy = 0, 0
-                step = square_size_px
-
-                if square_location == "1": 
-                    dx = -step
-                    dy = step
-                elif square_location == "2":
-                    dy = step
-                elif square_location == "3":
-                    dx = step
-                    dy = step
-                elif square_location == "4": 
-                    dx = -step
-                elif square_location == "5": 
-                    dx = 0
-                    dy = 0 # centre square
-                elif square_location == "6": 
-                    dx = step
-                elif square_location == "7": 
-                    dx = -step
-                    dy = -step
-                elif square_location == "8": 
-                    dy = -step
-                elif square_location == "9": 
-                    dx = step
-                    dy = -step
-
-                blit(
-                    white_square,
-                    registration=5,
-                    location=(cx + dx, cy + dy)
-                )
-
-            fill()
-            draw_a_square("1")
-            draw_a_square("2")
-            draw_a_square("3")
-            draw_a_square("4")
-            draw_a_square("5") # Centre square
-            draw_a_square("6")
-            draw_a_square("7")
-            draw_a_square("8")
-            draw_a_square("9")
-            flip()
-
         def draw_spatial_search_array(target_task_array=None):
             """
             Draws a 3x3 spatial search array.
@@ -218,8 +154,20 @@ class aether_typing_study_experiment(klibs.Experiment):
                 draw_a_square(str(i))
             flip()
 
-        draw_spatial_search_array()
-        any_key()
+        def spatial_search_array_stimuli(): 
+
+            draw_spatial_search_array()
+            any_key()
+            draw_spatial_search_array("1")
+            any_key()
+            draw_spatial_search_array("2")
+            any_key()
+            draw_spatial_search_array("3")
+            any_key()
+            draw_spatial_search_array("4")
+            any_key()
+
+        spatial_search_array_stimuli()
 
         # Call typing_task and capture the response
         #typed_text = self.typing_task()
