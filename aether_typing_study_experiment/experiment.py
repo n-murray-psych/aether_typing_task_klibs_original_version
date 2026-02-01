@@ -218,6 +218,7 @@ class aether_typing_study_experiment(klibs.Experiment):
  
     def setup_response_collector(self):
 
+        # Give participants 2 seconds to respond to each spatial array
         self.rc.terminate_after = [2000, TK_MS]
         self.rc.uses(CursorResponse)
 
@@ -241,19 +242,25 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def trial(self):
 
-        # Configure RC for this trial
-        self.setup_response_collector()
+        # Run the spatial response collector
 
-        # Run response collection (draws array, waits for click/timeout)
-        self.rc.collect()
+        run_spatial_task_response_collector = True # Set as default for testing; will change later depending on the block
 
-        # This should be the label of the boundary the click fell inside,
-        # i.e., "1"–"9", or None on timeout
-        spatial_response = self.rc.cursor_listener.response()
+        if run_spatial_task_response_collector == True: 
 
-        # Optional: clear the screen after
-        fill()
-        flip()
+            # Configure RC for this trial
+            self.setup_response_collector()
+
+            # Run response collection (draws array, waits for click/timeout)
+            self.rc.collect()
+
+            # This should be the label of the boundary the click fell inside,
+            # i.e., "1"–"9", or None on timeout
+            spatial_response = self.rc.cursor_listener.response()
+
+            # Optional: clear the screen after
+            fill()
+            flip()
 
         # Run spatial search task stimuli
         #self.spatial_search_array_stimuli()
