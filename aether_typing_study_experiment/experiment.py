@@ -250,6 +250,65 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         self.verbal_task_response = verbal_task_response
 
+        #####################################
+        # VERBAL TASK STIMULI
+        #####################################
+
+        def verbal_task_stimuli(words):
+            """
+            Present a list of 4 words one at a time.
+
+            Args:
+                words (list/tuple): 4 strings to present in order.
+            """
+
+            # Basic safety: if more than 4 provided, just use the first 4
+            words = list(words)[:4]
+
+            # Instruction screen
+            instr = message(
+                "Remember the following list of words",
+                style="default",
+                align="center",
+                blit_txt=False
+            )
+
+            fill()
+            blit(instr, registration=5, location=P.screen_c)
+            flip()
+            any_key()  # wait for participant to be ready
+
+            # Present each word for 1s, with 200ms blank between
+            for i, w in enumerate(words):
+
+                # Create the word surface
+                word_msg = message(
+                    w,
+                    style="default",
+                    align="center",
+                    blit_txt=False
+                )
+
+                # --- Show word for 1 second ---
+                word_timer = CountDown(1.0)  # 1 second
+                while word_timer.counting():
+                    # Keep KLibs responsive
+                    pump(True)
+
+                    fill()
+                    blit(word_msg, registration=5, location=P.screen_c)
+                    flip()
+
+                # --- 200 ms blank interval before next word ---
+                if i < len(words) - 1:
+                    gap_timer = CountDown(0.2)  # 200 ms
+                    while gap_timer.counting():
+                        pump(True)
+                        fill()
+                        flip()
+
+        self.verbal_task_stimuli = verbal_task_stimuli
+            
     def block(self):
         pass
  
@@ -278,6 +337,11 @@ class aether_typing_study_experiment(klibs.Experiment):
         pass
 
     def trial(self):
+
+        # Set your response variables to NONE when you're testing the development of other tasks.
+        #typed_text = None
+        #spatial_response = None
+        #verbal_response = None
 
         # Define the response collector as a function within the trial 
         # so all this code doesn't have to be written over and over again
@@ -309,11 +373,16 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Run spatial task response collector
         spatial_response = spatial_task_response_collector()
 
+        # Run verbal task stimuli
+        word_list = ["Table", "House", "Garden", "Pencil"]
+
+        self.verbal_task_stimuli(word_list)
+
+        # Call typing_task and capture the response
+        typed_text = self.typing_task()
+
         # Run verbal task response collection
         verbal_response = self.verbal_task_response("1")
-
-        # Set your response variables to NONE when you're testing the development of other tasks.
-        #typed_text = None
         
         return {
             "block_num": P.block_number,
