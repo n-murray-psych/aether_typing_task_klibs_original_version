@@ -89,7 +89,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # SPATIAL TASK: STIMULI
         #####################################
 
-        def draw_spatial_search_array(target_task_array=None):
+        def draw_spatial_search_array(target_task_array=None, response_task_array=False):
             """
             Draws a 3x3 spatial search array.
 
@@ -154,6 +154,20 @@ class aether_typing_study_experiment(klibs.Experiment):
             fill()
             for i in range(1, 10):
                 draw_a_square(str(i))
+            if response_task_array == True:
+                # Instruction message for spatial response phase
+                self.spatial_msg = message(
+                    "Click the FIRST square in the array which turned black",
+                    style="default",
+                    align="center",
+                    blit_txt=False
+                )
+                self.spatial_msg_loc = (P.screen_c[0], int(P.screen_y * 0.25))
+                blit(
+                    self.spatial_msg, 
+                    registration = 5,
+                    location = self.spatial_msg_loc
+                )
             flip()
 
         self.draw_spatial_search_array = draw_spatial_search_array
@@ -224,7 +238,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         # draw your spatial array while collecting the response
         # (make sure draw_spatial_search_array() draws the BLANK 3x3 when called with no args)
-        self.rc.display_callback = self.draw_spatial_search_array
+        self.rc.display_callback = self.draw_spatial_search_array(response_task_array=True)
 
         listener = self.rc.cursor_listener
         listener.interrupts = True  # end as soon as a valid click happens
@@ -245,6 +259,15 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Run the spatial response collector
 
         run_spatial_task_response_collector = True # Set as default for testing; will change later depending on the block
+
+        # Instruction message for spatial response phase
+        self.spatial_msg = message(
+            "Click the FIRST square in the array which turned black",
+            style="default",
+            align="center",
+            blit_txt=False
+        )
+        self.spatial_msg_loc = (P.screen_c[0], int(P.screen_y * 0.25))
 
         if run_spatial_task_response_collector == True: 
 
