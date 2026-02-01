@@ -256,21 +256,11 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def trial(self):
 
-        # Run the spatial response collector
+        # Define the response collector as a function within the trial 
+        # so all this code doesn't have to be written over and over again
+        # every time you run the response collector.
 
-        run_spatial_task_response_collector = True # Set as default for testing; will change later depending on the block
-
-        # Instruction message for spatial response phase
-        self.spatial_msg = message(
-            "Click the FIRST square in the array which turned black",
-            style="default",
-            align="center",
-            blit_txt=False
-        )
-        self.spatial_msg_loc = (P.screen_c[0], int(P.screen_y * 0.25))
-
-        if run_spatial_task_response_collector == True: 
-
+        def spatial_task_response_collector(): 
             # Configure RC for this trial
             self.setup_response_collector()
 
@@ -285,14 +275,19 @@ class aether_typing_study_experiment(klibs.Experiment):
             fill()
             flip()
 
+            return spatial_response
+
         # Run spatial search task stimuli
-        #self.spatial_search_array_stimuli()
+        self.spatial_search_array_stimuli()
 
         # Call typing_task and capture the response
-        #typed_text = self.typing_task()
+        typed_text = self.typing_task()
+
+        # Run spatial task response collector
+        spatial_response = spatial_task_response_collector()
 
         # Set your response variables to NONE when you're testing the development of other tasks.
-        typed_text = None
+        #typed_text = None
         
         return {
             "block_num": P.block_number,
