@@ -227,6 +227,29 @@ class aether_typing_study_experiment(klibs.Experiment):
             boundary = RectangleBoundary(label, top_left, bottom_right)
             self.spatial_boundaries[label] = boundary
 
+        #####################################
+        # VERBAL TASK: RESPONSE
+        #####################################
+
+        def verbal_task_response(word_number=None):
+
+            # Use the verbal query you defined in params.py
+            if word_number == "1": 
+                q = user_queries.verbal1[0]
+            elif word_number == "2": 
+                q = user_queries.verbal2[0]
+            elif word_number == "3": 
+                q = user_queries.verbal3[0] 
+            elif word_number == "4": 
+                q = user_queries.verbal4[0]   
+
+            # Show the query + timer, let them type
+            verbal_response = query(q)
+
+            return verbal_response
+
+        self.verbal_task_response = verbal_task_response
+
     def block(self):
         pass
  
@@ -286,6 +309,9 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Run spatial task response collector
         spatial_response = spatial_task_response_collector()
 
+        # Run verbal task response collection
+        verbal_response = self.verbal_task_response("1")
+
         # Set your response variables to NONE when you're testing the development of other tasks.
         #typed_text = None
         
@@ -293,7 +319,8 @@ class aether_typing_study_experiment(klibs.Experiment):
             "block_num": P.block_number,
             "trial_num": P.trial_number,
             "typed_response": typed_text,
-            "spatial_search_task_response": spatial_response
+            "spatial_search_task_response": spatial_response,
+            "verbal_response": verbal_response
         }
 
     def trial_clean_up(self):

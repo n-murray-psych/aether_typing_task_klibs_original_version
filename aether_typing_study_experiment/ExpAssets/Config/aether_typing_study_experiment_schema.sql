@@ -56,5 +56,6 @@ CREATE TABLE trials (
     block_num integer not null,
     trial_num integer not null, 
     typed_response text not null, 
-    spatial_search_task_response text not null
+    spatial_search_task_response text not null, 
+    verbal_response text not null
 );

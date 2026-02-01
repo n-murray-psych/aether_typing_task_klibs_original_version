@@ -103,5 +103,89 @@
             "anonymous_value": "n", 
             "active": true
         }
+    ],
+    "verbal1": [
+        {
+            "title": "verbal1", 
+            "database_field": "text_response", 
+            "query": "What is the FIRST word you remember seeing in the list?", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "verbal2": [
+        {
+            "title": "verbal2", 
+            "database_field": "text_response", 
+            "query": "What is the SECOND word you remember seeing in the list?", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "verbal3": [
+        {
+            "title": "verbal3", 
+            "database_field": "text_response", 
+            "query": "What is the THIRD word you remember seeing in the list?", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "verbal4": [
+        {
+            "title": "verbal4", 
+            "database_field": "text_response", 
+            "query": "What is the FOURTH word you remember seeing in the list?", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
     ]
 }
