@@ -55,5 +55,6 @@ CREATE TABLE trials (
     participant_id integer not null references participants(id),
     block_num integer not null,
     trial_num integer not null, 
-    typed_response text not null
+    typed_response text not null, 
+    spatial_search_task_response text not null
 );

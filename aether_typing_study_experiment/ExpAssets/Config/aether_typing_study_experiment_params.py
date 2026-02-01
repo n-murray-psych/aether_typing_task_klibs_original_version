@@ -1,5 +1,7 @@
 ### Klibs Parameter overrides ###
 
+from klibs import P
+
 #########################################
 # Runtime Settings
 #########################################
@@ -66,3 +68,8 @@ append_hostname = False
 #########################################
 # PROJECT-SPECIFIC VARS
 #########################################
+P.data_fields = [
+    "block_num", 
+    "trial_num", 
+    "spatial_search_task_response"
+]

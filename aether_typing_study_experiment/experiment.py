@@ -4,7 +4,7 @@ __author__ = "Nicholas Murray"
 
 import klibs
 from klibs import P
-from klibs.KLUserInterface import any_key
+from klibs.KLUserInterface import any_key, mouse_pos, get_clicks
 from klibs.KLGraphics import fill, blit, flip, KLDraw as kld  # kld to draw shapes on the screen
 from klibs.KLCommunication import user_queries, query, query_no_backspace, message
 from klibs.KLUtilities import deg_to_px
@@ -13,6 +13,9 @@ from klibs.KLTime import CountDown
 from klibs.KLEventQueue import pump
 from klibs.KLGraphics.KLDraw import Rectangle
 import random
+from klibs.KLResponseCollectors import CursorResponse 
+from klibs.KLConstants import TK_MS
+from klibs.KLBoundary import RectangleBoundary, BoundarySet
 
 class aether_typing_study_experiment(klibs.Experiment):
 
@@ -170,13 +173,87 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         self.spatial_search_array_stimuli = spatial_search_array_stimuli
 
+        ################################################
+        # SPATIAL TASK: RESPONSE COLLECTION BOUNDARIES
+        ################################################
+        
+        # --- Build 3×3 grid as RectangleBoundary objects ---
+        array_size_deg = 3
+        square_size_deg = array_size_deg / 3.0
+        square_size_px = int(deg_to_px(square_size_deg))
+        step = square_size_px
+        half = square_size_px / 2.0
+
+        cx, cy = P.screen_c  # screen centre
+
+        # store boundaries here: "1"–"9" -> RectangleBoundary
+        self.spatial_boundaries = {}
+
+        for idx in range(1, 10):  # 1..9
+
+            # Grid layout:
+            # 1 2 3  -> top row
+            # 4 5 6  -> middle row
+            # 7 8 9  -> bottom row
+
+            row = (idx - 1) // 3      # 0 (top), 1 (middle), 2 (bottom)
+            col = (idx - 1) % 3       # 0 (left), 1 (centre), 2 (right)
+
+            # Centre of each square
+            x_c = cx + (col - 1) * step   # -step, 0, +step
+            y_c = cy + (1 - row) * step   # +step, 0, -step
+
+            top_left     = (x_c - half, y_c - half)
+            bottom_right = (x_c + half, y_c + half)
+
+            label = str(idx)  # "1"–"9"
+
+            # This is basically your button1/button2 pattern:
+            # box1 = RectangleBoundary('1', (x1, y1), (x2, y2))
+            boundary = RectangleBoundary(label, top_left, bottom_right)
+            self.spatial_boundaries[label] = boundary
+
     def block(self):
         pass
+ 
+    def setup_response_collector(self):
+
+        self.rc.terminate_after = [2000, TK_MS]
+        self.rc.uses(CursorResponse)
+
+        # draw your spatial array while collecting the response
+        # (make sure draw_spatial_search_array() draws the BLANK 3x3 when called with no args)
+        self.rc.display_callback = self.draw_spatial_search_array
+
+        listener = self.rc.cursor_listener
+        listener.interrupts = True  # end as soon as a valid click happens
+
+        # IMPORTANT: listener.boundaries is an OrderedDict (label -> Boundary)
+        # Clear any old ones:
+        listener.boundaries.clear()
+
+        # Add our 9 RectangleBoundary objects
+        for label, boundary in self.spatial_boundaries.items():
+            listener.boundaries[label] = boundary
 
     def trial_prep(self):
         pass
 
     def trial(self):
+
+        # Configure RC for this trial
+        self.setup_response_collector()
+
+        # Run response collection (draws array, waits for click/timeout)
+        self.rc.collect()
+
+        # This should be the label of the boundary the click fell inside,
+        # i.e., "1"–"9", or None on timeout
+        spatial_response = self.rc.cursor_listener.response()
+
+        # Optional: clear the screen after
+        fill()
+        flip()
 
         # Run spatial search task stimuli
         #self.spatial_search_array_stimuli()
@@ -186,10 +263,12 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         # Set your response variables to NONE when you're testing the development of other tasks.
         typed_text = None
+        
         return {
             "block_num": P.block_number,
             "trial_num": P.trial_number,
             "typed_response": typed_text,
+            "spatial_search_task_response": spatial_response
         }
 
     def trial_clean_up(self):
