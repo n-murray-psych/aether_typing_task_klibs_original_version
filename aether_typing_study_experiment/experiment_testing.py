@@ -4,7 +4,7 @@ __author__ = "Nicholas Murray"
 
 import klibs
 from klibs import P
-from klibs.KLUserInterface import any_key
+from klibs.KLUserInterface import any_key, show_cursor, hide_cursor
 from klibs.KLGraphics import fill, blit, flip, KLDraw as kld  # kld to draw shapes on the screen
 from klibs.KLCommunication import user_queries, query, query_no_backspace, message
 from klibs.KLUtilities import deg_to_px
@@ -14,13 +14,14 @@ from klibs.KLEventQueue import pump
 from klibs.KLGraphics.KLDraw import Rectangle
 import random
 
+
 class aether_typing_study_experiment(klibs.Experiment):
 
     def setup(self):
 
-        #####################################
-        # TYPING TASK: STIMULI AND RESPONSES
-        #####################################
+        ##############################################
+        # TYPING TASK STIMULI AND RESPONSE COLLECTION
+        ##############################################
 
         # Define typing task and attach it to self
         def typing_task():
@@ -82,10 +83,10 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         self.typing_task = typing_task
 
-        #####################################
-        # SPATIAL TASK: STIMULI
-        #####################################
-
+        ##############################################
+        # SPATIAL SEARCH TASK STIMULI
+        ##############################################
+        
         def draw_spatial_search_array(target_task_array=None):
             """
             Draws a 3x3 spatial search array.
@@ -155,20 +156,67 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         self.draw_spatial_search_array = draw_spatial_search_array
 
-        def spatial_search_array_stimuli(): 
+        ##############################################
+        # SPATIAL SEARCH TASK RESPONSE COLLECTOR
+        ##############################################
 
-            draw_spatial_search_array()
-            any_key()
-            draw_spatial_search_array("1")
-            any_key()
-            draw_spatial_search_array("2")
-            any_key()
-            draw_spatial_search_array("3")
-            any_key()
-            draw_spatial_search_array("4")
-            any_key()
+        # --- Precompute geometry for click detection ---
+        array_size_deg = 3
+        square_size_deg = array_size_deg / 3
+        square_size_px = int(deg_to_px(square_size_deg))
+        step = square_size_px
+        half = square_size_px / 2.0
 
-        self.spatial_search_array_stimuli = spatial_search_array_stimuli
+        cx, cy = P.screen_c
+
+        # Same mapping as before
+        offsets = {
+            "1": (-step,  step),
+            "2": ( 0,     step),
+            "3": ( step,  step),
+            "4": (-step,  0),
+            "5": ( 0,     0),
+            "6": ( step,  0),
+            "7": (-step, -step),
+            "8": ( 0,    -step),
+            "9": ( step, -step),
+        }
+
+        # Bounding boxes: { "1": (xmin, xmax, ymin, ymax), ... }
+        self.spatial_cell_bounds = {}
+        for cell_id, (dx, dy) in offsets.items():
+            cx_i = cx + dx
+            cy_i = cy + dy
+            xmin = cx_i - half
+            xmax = cx_i + half
+            ymin = cy_i - half
+            ymax = cy_i + half
+            self.spatial_cell_bounds[cell_id] = (xmin, xmax, ymin, ymax)
+
+        def spatial_search_click_task():
+            
+            # Show cursor for this task
+            show_cursor()
+
+            # Show blank grid
+            self.draw_spatial_search_array()  # no target
+
+            while True:
+                for event in pump(True):
+                    if event.type == 1025:  # SDL_MOUSEBUTTONDOWN
+                        x = event.button.x
+                        y = event.button.y
+
+                        for cell_id, (xmin, xmax, ymin, ymax) in self.spatial_cell_bounds.items():
+                            if xmin <= x <= xmax and ymin <= y <= ymax:
+                                hide_cursor()
+                                return cell_id  # "1"–"9"
+                        # Click was outside the grid → keep waiting
+
+        self.spatial_search_click_task = spatial_search_click_task
+
+        # For now, deterministic target order for testing
+        self.spatial_target_sequence = ["1", "2", "3", "4"]
 
     def block(self):
         pass
@@ -178,11 +226,35 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def trial(self):
 
-        # Run spatial search task stimuli
-        #self.spatial_search_array_stimuli()
+       # How many spatial targets we defined
+        n_targets = len(self.spatial_target_sequence)
 
+        # Clamp trial_number to index into target sequence
+        # (assuming you're only running n_targets trials)
+        idx = (P.trial_number - 1) % n_targets
+        target_id = self.spatial_target_sequence[idx]  # "1", "2", "3", "4"
+
+        # 1) Show target array
+        self.draw_spatial_search_array(target_id)
+        any_key()  # for now, press any key to continue (replace with timing later)
+
+       # 2) Show blank array and collect click
+        response_id = self.spatial_search_click_task()  # "1"–"9"
+
+        # 3) (Optional) Clear screen or show feedback here
+
+        # 4) Return data for this trial → one row per response
+        return {
+            "block_num": P.block_number,
+            "trial_num": P.trial_number,
+            "spatial_target_id": target_id,
+            "spatial_search_task_response": response_id,
+            # "typed_response": None,  # if you still want this column
+        }
+    
         # Call typing_task and capture the response
         #typed_text = self.typing_task()
+        # self.draw_spatial_search_array() # Call spatial search task stimuli, but not the response collector
 
         # Set your response variables to NONE when you're testing the development of other tasks.
         typed_text = None
