@@ -89,6 +89,78 @@ class aether_typing_study_experiment(klibs.Experiment):
         # SPATIAL TASK: STIMULI
         #####################################
 
+        def draw_spatial_grid(target_task_array=None):
+            # --- Geometry ---
+            array_size_deg = 3
+            square_size_deg = array_size_deg / 3
+            square_size_px = int(deg_to_px(square_size_deg))
+            step = square_size_px
+
+            WHITE = (255, 255, 255)
+            BLACK = (0, 0, 0)
+
+            if target_task_array is not None:
+                target_task_array = str(target_task_array)
+
+            def draw_a_square(square_location):
+                fill_colour = BLACK if square_location == target_task_array else WHITE
+
+                single_square = Rectangle(
+                    width=square_size_px,
+                    height=square_size_px,
+                    fill=fill_colour,
+                    stroke=[1, (0, 0, 0)]
+                )
+
+                cx, cy = P.screen_c
+                dx, dy = 0, 0
+
+                if square_location == "1":
+                    dx, dy = -step, step
+                elif square_location == "2":
+                    dy = step
+                elif square_location == "3":
+                    dx, dy = step, step
+                elif square_location == "4":
+                    dx = -step
+                elif square_location == "5":
+                    pass
+                elif square_location == "6":
+                    dx = step
+                elif square_location == "7":
+                    dx, dy = -step, -step
+                elif square_location == "8":
+                    dy = -step
+                elif square_location == "9":
+                    dx, dy = step, -step
+
+                blit(single_square, registration=5, location=(cx + dx, cy + dy))
+
+            # Draw full grid
+            fill()
+            for i in range(1, 10):
+                draw_a_square(str(i))
+
+        self.draw_spatial_grid = draw_spatial_grid
+
+        def draw_spatial_array_with_message(target_task_array=None):
+            # draw grid
+            self.draw_spatial_grid(target_task_array)
+
+            # draw the instruction message
+            spatial_msg = message(
+                "Click the FIRST square in the array which turned black",
+                style="default",
+                align="center",
+                blit_txt=False
+            )
+            spatial_msg_loc = (P.screen_c[0], int(P.screen_y * 0.25))
+            blit(spatial_msg, registration=5, location=spatial_msg_loc)
+
+            flip()
+        
+        self.draw_spatial_array_with_message = draw_spatial_array_with_message
+
         def draw_spatial_search_array(target_task_array=None, response_task_array=False):
             """
             Draws a 3x3 spatial search array.
@@ -151,6 +223,7 @@ class aether_typing_study_experiment(klibs.Experiment):
                 blit(single_square, registration=5, location=(cx + dx, cy + dy))
 
             # --- Draw full array ---
+            response_task_array = response_task_array
             fill()
             for i in range(1, 10):
                 draw_a_square(str(i))
@@ -174,11 +247,10 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         def spatial_search_array_stimuli():
 
-            # Sequence of target squares to show
             targets = ["1", "2", "3", "4"]
 
-            # Optional: initial blank array before sequence
-            draw_spatial_search_array()
+            # initial blank
+            self.draw_spatial_grid(target_task_array=None)
             flip()
 
             start_timer = CountDown(1.0)
@@ -187,18 +259,20 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             for i, target in enumerate(targets):
 
-                # --- SHOW TARGET ARRAY (1 second) ---
+                # 1 second target
                 stim_timer = CountDown(1.0)
                 while stim_timer.counting():
                     pump(True)
-                    draw_spatial_search_array(target)
+                    self.draw_spatial_grid(target)
+                    flip()
 
-                # --- INTER-STIMULUS BLANK (200 ms) ---
+                # 200 ms blank
                 if i < len(targets) - 1:
                     isi_timer = CountDown(0.2)
                     while isi_timer.counting():
                         pump(True)
-                        draw_spatial_search_array()  # blank array
+                        self.draw_spatial_grid(None)
+                        flip()
 
         self.spatial_search_array_stimuli = spatial_search_array_stimuli
 
@@ -335,7 +409,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         # draw your spatial array while collecting the response
         # (make sure draw_spatial_search_array() draws the BLANK 3x3 when called with no args)
-        self.rc.display_callback = self.draw_spatial_search_array(response_task_array=True)
+        self.rc.display_callback = self.draw_spatial_array_with_message
 
         listener = self.rc.cursor_listener
         listener.interrupts = True  # end as soon as a valid click happens
