@@ -10,7 +10,7 @@ from klibs.KLCommunication import user_queries, query, query_no_backspace, messa
 from klibs.KLUtilities import deg_to_px
 from klibs.KLJSON_Object import AttributeDict
 from klibs.KLTime import CountDown
-from klibs.KLEventQueue import pump
+from klibs.KLEventQueue import pump, flush
 from klibs.KLGraphics.KLDraw import Rectangle
 from klibs.KLResponseCollectors import CursorResponse 
 from klibs.KLConstants import TK_MS
@@ -33,6 +33,19 @@ class aether_typing_study_experiment(klibs.Experiment):
             """Text Sample C . . . """
         ]
 
+        # Set all possible text orders
+        text_indices = [0, 1, 2]
+        self.all_text_orders = list(itertools.permutations(text_indices))  # 6 permutations
+
+        # Example: always use text 0, then 1, then 2
+        self.text_order = (0, 1, 2)
+        # Or randomly:
+        # self.text_order = random.choice(self.all_text_orders)
+
+        # Set all possible task orders
+        task_labels = ["typing", "spatial", "verbal"]
+        self.all_task_orders = list(itertools.permutations(task_labels))
+
         # Define typing task and attach it to self
         def typing_task(text_index):
 
@@ -48,7 +61,12 @@ class aether_typing_study_experiment(klibs.Experiment):
                 )
                 blit(msg, 1, (int(P.screen_x * 0.05), int(P.screen_y * 0.84)))
 
-            q = user_queries.experimental[0]
+            if text_index == 0: 
+                q = user_queries.experimental[0]
+            elif text_index == 1:
+                q = user_queries.typing1[0]
+            elif text_index == 2:
+                q = user_queries.typing2[0]
 
             q.format.positions = AttributeDict({
                 "locations": AttributeDict({
@@ -421,6 +439,40 @@ class aether_typing_study_experiment(klibs.Experiment):
                         flip()
 
         self.verbal_task_stimuli = verbal_task_stimuli
+
+        ########################################
+        # Define the block orders for each task
+        ########################################
+
+        def run_typing_block(text_index): 
+            typed_text = self.typing_task(text_index)
+            return typed_text
+        
+        self.run_typing_block = run_typing_block
+        
+        def run_spatial_block():
+            self.spatial_search_array_stimuli()
+            spatial_responses = []
+            for n in range(1, 5): 
+                resp = self.spatial_task_response_collector(which_n=n)
+                spatial_responses.append(resp)
+            return spatial_responses
+        
+        self.run_spatial_block = run_spatial_block
+            
+        def run_verbal_block(word_list): 
+            self.verbal_task_stimuli(word_list)
+            verbal_responses = []
+            for i in range(1, 5):
+                resp = self.verbal_task_response(str(i))
+                verbal_responses.append(resp)
+            return(verbal_responses)
+        
+        self.run_verbal_block = run_verbal_block
+
+        # Randomize the task order
+        self.task_order = random.choice(self.all_task_orders)      # one of the 6 task orders
+        self.text_order = random.choice(self.all_text_orders)      # one of the 6 text orders
             
     def block(self):
         pass
@@ -439,6 +491,9 @@ class aether_typing_study_experiment(klibs.Experiment):
         listener.boundaries.clear()
         for label, boundary in self.spatial_boundaries.items():
             listener.boundaries[label] = boundary
+
+        flush()
+        listener.reset()
 
     def trial_prep(self):
         pass
@@ -485,37 +540,96 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Defining the task order
         ######################################################
 
-        ######################################################
-        # DEMO FOR TESTING PURPOSES
-        ######################################################
+        typing_spatial_verbal = True  # placeholder flag; later this can be a trial/block factor
 
-        # Run spatial search task stimuli
-        self.spatial_search_array_stimuli()
+        # Only handle the complex sequence when this flag is set
+        if typing_spatial_verbal:
 
-        # Call typing_task and capture the response
-        typed_text = self.typing_task(1)
+            # Bookkeeping for which left_text we use on each typing block
+            typing_block_index = 0
 
-        # Run spatial task response collector
-        spatial_response = self.spatial_task_response_collector(which_n=4)
+            # You can vary the word list per participant / per condition if you want
+            word_list = ["Table", "House", "Garden", "Pencil"]
 
-        # Run verbal task stimuli
-        word_list = ["Table", "House", "Garden", "Pencil"]
-        self.verbal_task_stimuli(word_list)
+            # To store everything if you want to inspect later
+            all_typed = []
+            all_spatial_resps = []
+            all_verbal_resps = []
 
-        # Call typing_task and capture the response
-        typed_text = self.typing_task(2)
+            # Loop over the 3 tasks in whatever order we've picked
+            for task in self.task_order:
 
-        # Run verbal task response collection
-        verbal_response = self.verbal_task_response("1")
-        
+                if task == "typing":
+                    # Which left_text sample should this typing block use?
+                    text_idx = self.text_order[typing_block_index]
+                    typing_block_index += 1
+
+                    typed = self.run_typing_block(text_idx)
+                    all_typed.append((text_idx, typed))
+
+                elif task == "spatial":
+                    spatial_resps = self.run_spatial_block()
+                    all_spatial_resps.append(spatial_resps)
+
+                elif task == "verbal":
+                    verbal_resps = self.run_verbal_block(word_list)
+                    all_verbal_resps.append(verbal_resps)
+
+            # ---- DATA UNPACKING / SAFETY ----
+
+            # Typed text: you *might* later have up to 3 typing blocks, so keep this pattern.
+            typed0 = all_typed[0][1] if len(all_typed) > 0 else None
+            typed1 = all_typed[1][1] if len(all_typed) > 1 else None
+            typed2 = all_typed[2][1] if len(all_typed) > 2 else None
+
+            # Spatial: currently you have exactly ONE spatial block with 4 responses
+            if len(all_spatial_resps) > 0:
+                sblock = all_spatial_resps[0]   # list of 4 responses
+            else:
+                sblock = [None, None, None, None]
+
+            s0 = sblock[0] if len(sblock) > 0 else None
+            s1 = sblock[1] if len(sblock) > 1 else None
+            s2 = sblock[2] if len(sblock) > 2 else None
+            s3 = sblock[3] if len(sblock) > 3 else None
+
+            # Verbal: same idea as spatial
+            if len(all_verbal_resps) > 0:
+                vblock = all_verbal_resps[0]   # list of 4 responses
+            else:
+                vblock = [None, None, None, None]
+
+            v0 = vblock[0] if len(vblock) > 0 else None
+            v1 = vblock[1] if len(vblock) > 1 else None
+            v2 = vblock[2] if len(vblock) > 2 else None
+            v3 = vblock[3] if len(vblock) > 3 else None
+
+            # ---- DATA RETURN ----
+            # Here we’re still returning ONE row for this "mega trial".
+            # You can unpack or summarize however you like, e.g.:
+
         return {
             "block_num": P.block_number,
             "trial_num": P.trial_number,
-            "typed_response": typed_text,
-            "spatial_search_task_response": spatial_response,
-            "verbal_response": verbal_response
-        }
 
+            # typed responses (from up to 3 typing blocks)
+            "typing_text0_resp": typed0,
+            "typing_text1_resp": typed1,
+            "typing_text2_resp": typed2,
+
+            # spatial responses (4 clicks from the spatial block)
+            "spatial_response0": s0,
+            "spatial_response1": s1,
+            "spatial_response2": s2,
+            "spatial_response3": s3,
+
+            # verbal responses (4 recalls from the verbal block)
+            "verbal_response0": v0,
+            "verbal_response1": v1,
+            "verbal_response2": v2,
+            "verbal_response3": v3,
+        }
+    
     def trial_clean_up(self):
         pass
 
