@@ -532,76 +532,73 @@ class aether_typing_study_experiment(klibs.Experiment):
         self.spatial_task_response_collector = spatial_task_response_collector
 
         ######################################################
-        # Defining the task order
+        # Task order counterbalanced
         ######################################################
 
-        typing_spatial_verbal = True  # placeholder flag; later this can be a trial/block factor
+        # Control, spatial, verbal
 
-        # Only handle the complex sequence when this flag is set
-        if typing_spatial_verbal:
+        # Store all responses to be inspected and saved later
+        all_typed = []
+        spatial_responses = []
+        verbal_responses = []
 
-            # Bookkeeping for which left_text we use on each typing block
-            typing_block_index = 0
+        # Run the typing task (control, no working memory task)
+        typing_block_index = 0 # Text set to start from
+        text_idx = self.text_order[typing_block_index]
+        typing_block_index += 1
 
-            # You can vary the word list per participant / per condition if you want
-            word_list = ["Table", "House", "Garden", "Pencil"]
+        typed = self.run_typing_block(text_idx)
+        all_typed.append((text_idx, typed))
 
-            # To store everything if you want to inspect later
-            all_typed = []
-            all_spatial_resps = []
-            all_verbal_resps = []
+        # Run the spatial task
+        self.spatial_search_array_stimuli()
+        spatial_responses = []
 
-            # Loop over the 3 tasks in whatever order we've picked
-            for task in self.task_order:
+        text_idx = self.text_order[typing_block_index]
+        typing_block_index += 1
+        typed = self.run_typing_block(text_idx)
+        all_typed.append((text_idx, typed))
 
-                if task == "typing":
-                    # Which left_text sample should this typing block use?
-                    text_idx = self.text_order[typing_block_index]
-                    typing_block_index += 1
+        for n in range(1, 5): 
+            resp = self.spatial_task_response_collector(which_n=n)
+            spatial_responses.append(resp)
+        
+        # Run the verbal task
+        word_list = ["Table", "House", "Garden", "Pencil"]
+        self.verbal_task_stimuli(word_list)
+        verbal_responses = []
+        
+        text_idx = self.text_order[typing_block_index]
+        typing_block_index += 1
+        typed = self.run_typing_block(text_idx)
+        all_typed.append((text_idx, typed))
 
-                    typed = self.run_typing_block(text_idx)
-                    all_typed.append((text_idx, typed))
+        for i in range(1, 5): 
+            resp = self.verbal_task_response(str(i))
+            verbal_responses.append(resp)
 
-                elif task == "spatial":
-                    spatial_resps = self.run_spatial_block()
-                    all_spatial_resps.append(spatial_resps)
+        # ---- DATA UNPACKING / SAFETY ----
 
-                elif task == "verbal":
-                    verbal_resps = self.run_verbal_block(word_list)
-                    all_verbal_resps.append(verbal_resps)
+        # Typed text: you *might* later have up to 3 typing blocks, so keep this pattern.
+        typed0 = all_typed[0][1] if len(all_typed) > 0 else None
+        typed1 = all_typed[1][1] if len(all_typed) > 1 else None
+        typed2 = all_typed[2][1] if len(all_typed) > 2 else None
 
-            # ---- DATA UNPACKING / SAFETY ----
+        # Spatial: currently you have exactly ONE spatial block with 4 responses
+        s0 = spatial_responses[0][0] if len(spatial_responses) >0 else None
+        s1 = spatial_responses[1][0] if len(spatial_responses) >1 else None
+        s2 = spatial_responses[2][0] if len(spatial_responses) >2 else None
+        s3 = spatial_responses[3][0] if len(spatial_responses) >3 else None
 
-            # Typed text: you *might* later have up to 3 typing blocks, so keep this pattern.
-            typed0 = all_typed[0][1] if len(all_typed) > 0 else None
-            typed1 = all_typed[1][1] if len(all_typed) > 1 else None
-            typed2 = all_typed[2][1] if len(all_typed) > 2 else None
+        # Verbal: same idea as spatial
+        v0 = verbal_responses[0] if len(verbal_responses) >0 else None
+        v1 = verbal_responses[1] if len(verbal_responses) >1 else None
+        v2 = verbal_responses[2] if len(verbal_responses) >2 else None
+        v3 = verbal_responses[3] if len(verbal_responses) >3 else None
 
-            # Spatial: currently you have exactly ONE spatial block with 4 responses
-            if len(all_spatial_resps) > 0:
-                sblock = all_spatial_resps[0]   # list of 4 responses
-            else:
-                sblock = [None, None, None, None]
-
-            s0 = sblock[0] if len(sblock) > 0 else None
-            s1 = sblock[1] if len(sblock) > 1 else None
-            s2 = sblock[2] if len(sblock) > 2 else None
-            s3 = sblock[3] if len(sblock) > 3 else None
-
-            # Verbal: same idea as spatial
-            if len(all_verbal_resps) > 0:
-                vblock = all_verbal_resps[0]   # list of 4 responses
-            else:
-                vblock = [None, None, None, None]
-
-            v0 = vblock[0] if len(vblock) > 0 else None
-            v1 = vblock[1] if len(vblock) > 1 else None
-            v2 = vblock[2] if len(vblock) > 2 else None
-            v3 = vblock[3] if len(vblock) > 3 else None
-
-            # ---- DATA RETURN ----
-            # Here we’re still returning ONE row for this "mega trial".
-            # You can unpack or summarize however you like, e.g.:
+        # ---- DATA RETURN ----
+        # Here we’re still returning ONE row for this "mega trial".
+        # You can unpack or summarize however you like, e.g.:
 
         return {
             "block_num": P.block_number,
