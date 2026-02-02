@@ -172,18 +172,33 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         self.draw_spatial_search_array = draw_spatial_search_array
 
-        def spatial_search_array_stimuli(): 
+        def spatial_search_array_stimuli():
 
+            # Sequence of target squares to show
+            targets = ["1", "2", "3", "4"]
+
+            # Optional: initial blank array before sequence
             draw_spatial_search_array()
-            any_key()
-            draw_spatial_search_array("1")
-            any_key()
-            draw_spatial_search_array("2")
-            any_key()
-            draw_spatial_search_array("3")
-            any_key()
-            draw_spatial_search_array("4")
-            any_key()
+            flip()
+
+            start_timer = CountDown(1.0)
+            while start_timer.counting():
+                pump(True)
+
+            for i, target in enumerate(targets):
+
+                # --- SHOW TARGET ARRAY (1 second) ---
+                stim_timer = CountDown(1.0)
+                while stim_timer.counting():
+                    pump(True)
+                    draw_spatial_search_array(target)
+
+                # --- INTER-STIMULUS BLANK (200 ms) ---
+                if i < len(targets) - 1:
+                    isi_timer = CountDown(0.2)
+                    while isi_timer.counting():
+                        pump(True)
+                        draw_spatial_search_array()  # blank array
 
         self.spatial_search_array_stimuli = spatial_search_array_stimuli
 
