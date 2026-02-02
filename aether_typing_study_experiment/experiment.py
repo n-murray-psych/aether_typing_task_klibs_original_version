@@ -12,10 +12,11 @@ from klibs.KLJSON_Object import AttributeDict
 from klibs.KLTime import CountDown
 from klibs.KLEventQueue import pump
 from klibs.KLGraphics.KLDraw import Rectangle
-import random
 from klibs.KLResponseCollectors import CursorResponse 
 from klibs.KLConstants import TK_MS
 from klibs.KLBoundary import RectangleBoundary, BoundarySet
+import itertools
+import random
 
 class aether_typing_study_experiment(klibs.Experiment):
 
@@ -25,11 +26,18 @@ class aether_typing_study_experiment(klibs.Experiment):
         # TYPING TASK: STIMULI AND RESPONSES
         #####################################
 
+        # Unique text samples
+        self.left_texts = [
+            """On a quiet morning, the city feels temporarily paused, as if everyone has collectively agreed to sleep a little longer than usual. Streets that are normally busy with traffic remain empty, and the air carries a faint stillness that is rarely noticed during the day. The sounds that do exist become more noticeable: a distant bus braking at an intersection, the rhythmic footsteps of a jogger passing by, or the low hum of heating systems waking up inside nearby buildings. These small details often go unnoticed when life moves quickly, but they shape the texture of everyday experience. People tend to underestimate how much routine influences their perception of time. A familiar schedule can make hours pass without reflection, while a small change can suddenly slow everything down. Taking a different route to work, trying a new food for breakfast, or sitting in a different chair can create a surprising sense of awareness. These moments disrupt habit just enough to draw attention back to the present, reminding us that experience is not only about what happens, but how it is noticed. Technology plays an increasingly central role in shaping attention, often pulling it away from these quieter moments. Notifications, messages, and alerts compete constantly for focus, fragmenting thought into smaller and smaller pieces. While these tools can be useful, they can also make it difficult to stay with a single task for long. Writing, reading, or thinking deeply often requires sustained concentration, something that now feels less natural than it once did. Despite this, many people are rediscovering the value of deliberate focus. Activities like journaling, long-form reading, or practicing a skill without interruption can feel restorative. These practices encourage patience and allow mistakes to happen without immediate correction. Over time, this slower pace can improve accuracy, creativity, and confidence, even when speed is eventually required. In the end, productivity is not only about efficiency, but about balance. Moving quickly has its place, especially when deadlines approach, but slowing down can reveal insights that speed alone cannot provide. Paying attention to small details, allowing thoughts to unfold naturally, and accepting moments of quiet can make everyday tasks feel more intentional and meaningful.""", 
+            """Text sample B . . . """, 
+            """Text Sample C . . . """
+        ]
+
         # Define typing task and attach it to self
-        def typing_task():
+        def typing_task(text_index):
 
             # Left column text
-            left_text = """On a quiet morning, the city feels temporarily paused, as if everyone has collectively agreed to sleep a little longer than usual. Streets that are normally busy with traffic remain empty, and the air carries a faint stillness that is rarely noticed during the day. The sounds that do exist become more noticeable: a distant bus braking at an intersection, the rhythmic footsteps of a jogger passing by, or the low hum of heating systems waking up inside nearby buildings. These small details often go unnoticed when life moves quickly, but they shape the texture of everyday experience. People tend to underestimate how much routine influences their perception of time. A familiar schedule can make hours pass without reflection, while a small change can suddenly slow everything down. Taking a different route to work, trying a new food for breakfast, or sitting in a different chair can create a surprising sense of awareness. These moments disrupt habit just enough to draw attention back to the present, reminding us that experience is not only about what happens, but how it is noticed. Technology plays an increasingly central role in shaping attention, often pulling it away from these quieter moments. Notifications, messages, and alerts compete constantly for focus, fragmenting thought into smaller and smaller pieces. While these tools can be useful, they can also make it difficult to stay with a single task for long. Writing, reading, or thinking deeply often requires sustained concentration, something that now feels less natural than it once did. Despite this, many people are rediscovering the value of deliberate focus. Activities like journaling, long-form reading, or practicing a skill without interruption can feel restorative. These practices encourage patience and allow mistakes to happen without immediate correction. Over time, this slower pace can improve accuracy, creativity, and confidence, even when speed is eventually required. In the end, productivity is not only about efficiency, but about balance. Moving quickly has its place, especially when deadlines approach, but slowing down can reveal insights that speed alone cannot provide. Paying attention to small details, allowing thoughts to unfold naturally, and accepting moments of quiet can make everyday tasks feel more intentional and meaningful."""
+            left_text = self.left_texts[text_index]
 
             def draw_left():
                 msg = message(
@@ -473,22 +481,29 @@ class aether_typing_study_experiment(klibs.Experiment):
         
         self.spatial_task_response_collector = spatial_task_response_collector
 
+        ######################################################
+        # Defining the task order
+        ######################################################
+
+        ######################################################
+        # DEMO FOR TESTING PURPOSES
+        ######################################################
+
         # Run spatial search task stimuli
         self.spatial_search_array_stimuli()
 
         # Call typing_task and capture the response
-        typed_text = self.typing_task()
+        typed_text = self.typing_task(1)
 
         # Run spatial task response collector
         spatial_response = self.spatial_task_response_collector(which_n=4)
 
         # Run verbal task stimuli
         word_list = ["Table", "House", "Garden", "Pencil"]
-
         self.verbal_task_stimuli(word_list)
 
         # Call typing_task and capture the response
-        typed_text = self.typing_task()
+        typed_text = self.typing_task(2)
 
         # Run verbal task response collection
         verbal_response = self.verbal_task_response("1")
