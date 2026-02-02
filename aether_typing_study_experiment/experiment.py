@@ -144,19 +144,35 @@ class aether_typing_study_experiment(klibs.Experiment):
         self.draw_spatial_grid = draw_spatial_grid
 
         def draw_spatial_array_with_message(target_task_array=None):
-            # draw grid
+            # 1. Draw the grid (no message)
             self.draw_spatial_grid(target_task_array)
 
-            # draw the instruction message
+            # 2. Decide which ordinal word to use based on self.n_square_message
+            #    Expected values: "first", "second", "third", "fourth"
+            #    Default to "first" if it's missing or something unexpected.
+            ordinal_key = getattr(self, "n_square_message", "first")
+
+            ordinal_map = {
+                "first":  "FIRST",
+                "second": "SECOND",
+                "third":  "THIRD",
+                "fourth": "FOURTH",
+            }
+            ordinal_word = ordinal_map.get(ordinal_key, "FIRST")
+
+            # 3. Build the instruction text with the correct ordinal
+            instr_text = f"Click the {ordinal_word} square in the array which turned black"
+
             spatial_msg = message(
-                "Click the FIRST square in the array which turned black",
+                instr_text,
                 style="default",
                 align="center",
                 blit_txt=False
             )
             spatial_msg_loc = (P.screen_c[0], int(P.screen_y * 0.25))
-            blit(spatial_msg, registration=5, location=spatial_msg_loc)
 
+            # 4. Draw message and flip
+            blit(spatial_msg, registration=5, location=spatial_msg_loc)
             flip()
         
         self.draw_spatial_array_with_message = draw_spatial_array_with_message
@@ -403,22 +419,16 @@ class aether_typing_study_experiment(klibs.Experiment):
  
     def setup_response_collector(self):
 
-        # Give participants 2 seconds to respond to each spatial array
         self.rc.terminate_after = [2000, TK_MS]
         self.rc.uses(CursorResponse)
 
-        # draw your spatial array while collecting the response
-        # (make sure draw_spatial_search_array() draws the BLANK 3x3 when called with no args)
+        # draw grid + dynamic message during response collection
         self.rc.display_callback = self.draw_spatial_array_with_message
 
         listener = self.rc.cursor_listener
-        listener.interrupts = True  # end as soon as a valid click happens
+        listener.interrupts = True
 
-        # IMPORTANT: listener.boundaries is an OrderedDict (label -> Boundary)
-        # Clear any old ones:
         listener.boundaries.clear()
-
-        # Add our 9 RectangleBoundary objects
         for label, boundary in self.spatial_boundaries.items():
             listener.boundaries[label] = boundary
 
@@ -436,22 +446,32 @@ class aether_typing_study_experiment(klibs.Experiment):
         # so all this code doesn't have to be written over and over again
         # every time you run the response collector.
 
-        def spatial_task_response_collector(): 
-            # Configure RC for this trial
+        def spatial_task_response_collector(which_n):
+            """
+            which_n: 1, 2, 3, or 4 indicating first/second/third/fourth target
+            """
+
+            idx_to_label = {
+                1: "first",
+                2: "second",
+                3: "third",
+                4: "fourth",
+            }
+
+            # Set the message state on the experiment object
+            self.n_square_message = idx_to_label.get(which_n, "first")
+
+            # Now configure and run the response collector
             self.setup_response_collector()
-
-            # Run response collection (draws array, waits for click/timeout)
             self.rc.collect()
-
-            # This should be the label of the boundary the click fell inside,
-            # i.e., "1"–"9", or None on timeout
             spatial_response = self.rc.cursor_listener.response()
 
-            # Optional: clear the screen after
             fill()
             flip()
 
             return spatial_response
+        
+        self.spatial_task_response_collector = spatial_task_response_collector
 
         # Run spatial search task stimuli
         self.spatial_search_array_stimuli()
@@ -460,7 +480,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         typed_text = self.typing_task()
 
         # Run spatial task response collector
-        spatial_response = spatial_task_response_collector()
+        spatial_response = self.spatial_task_response_collector(which_n=4)
 
         # Run verbal task stimuli
         word_list = ["Table", "House", "Garden", "Pencil"]
