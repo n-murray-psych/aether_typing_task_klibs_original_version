@@ -87,7 +87,7 @@
         {
             "title": "typing_response", 
             "database_field": "text_response", 
-            "query": "What did you have for breakfast today?", 
+            "query": "Rewrite the text you see on the left side of the screen:", 
             "accepted": null,
             "allow_null": false, 
             "format": {

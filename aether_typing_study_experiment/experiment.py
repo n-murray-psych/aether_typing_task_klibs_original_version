@@ -17,6 +17,7 @@ from klibs.KLConstants import TK_MS
 from klibs.KLBoundary import RectangleBoundary, BoundarySet
 import itertools
 import random
+from klibs.KLText import add_text_style
 
 class aether_typing_study_experiment(klibs.Experiment):
 
@@ -49,6 +50,8 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Define typing task and attach it to self
         def typing_task(text_index):
 
+            add_text_style(label = "timer_text", size = 48)
+
             # Left column text
             left_text = self.left_texts[text_index]
 
@@ -57,16 +60,11 @@ class aether_typing_study_experiment(klibs.Experiment):
                     left_text,
                     align="left",
                     wrap_width=int(P.screen_x * 0.45),
-                    blit_txt=False
+                    blit_txt=False 
                 )
                 blit(msg, 1, (int(P.screen_x * 0.05), int(P.screen_y * 0.84)))
 
-            if text_index == 0: 
-                q = user_queries.experimental[0]
-            elif text_index == 1:
-                q = user_queries.typing1[0]
-            elif text_index == 2:
-                q = user_queries.typing2[0]
+            q = user_queries.experimental[0]
 
             q.format.positions = AttributeDict({
                 "locations": AttributeDict({
@@ -93,11 +91,11 @@ class aether_typing_study_experiment(klibs.Experiment):
                 timer_y = int(P.screen_y * 0.1)
 
                 erase_w, erase_h = 300, 80
-                eraser = Rectangle(erase_w, erase_h, fill=(255, 0, 0))
+                eraser = Rectangle(erase_w, erase_h, fill=(176, 0, 0))
                 blit(eraser, 5, (timer_x, timer_y))
 
                 sec_left = int(self.timer.remaining())
-                timer_surface = message(mmss(sec_left), blit_txt=False)
+                timer_surface = message(mmss(sec_left), style = "timer_text", blit_txt=False)
                 blit(timer_surface, 5, (timer_x, timer_y))
 
             # Run the query and RETURN the typed text
@@ -366,16 +364,13 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # Use the verbal query you defined in params.py
             if word_number == "1": 
-                q = user_queries.verbal1[0]
+                verbal_response = query(user_queries.verbal1[0])
             elif word_number == "2": 
-                q = user_queries.verbal2[0]
+                verbal_response = query(user_queries.verbal2[0])
             elif word_number == "3": 
-                q = user_queries.verbal3[0] 
+                verbal_response = query(user_queries.verbal3[0])
             elif word_number == "4": 
-                q = user_queries.verbal4[0]   
-
-            # Show the query + timer, let them type
-            verbal_response = query(q)
+                verbal_response = query(user_queries.verbal4[0])   
 
             return verbal_response
 
