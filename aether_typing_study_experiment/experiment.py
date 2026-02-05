@@ -389,6 +389,20 @@ class aether_typing_study_experiment(klibs.Experiment):
         # VERBAL TASK STIMULI
         #####################################
 
+        self.possible_words = [
+            "ridge", "stick", "grain", "hatch", 
+            "close", "rim", "pole", "chair", 
+            "glass", "stone", "fork", "lamp", 
+            "field", "box", "sheet", "brick", 
+            "pin", "bell", "step", "card"
+        ]
+
+        self.practice_word_list = random.sample(population = self.possible_words, k = 4)
+        self.post_practice_words = [w for w in self.possible_words if w not in  self.practice_word_list]
+        self.first_word_list = random.sample(population = self.post_practice_words, k = 4)
+        self.post_first_word_list = [w for w in self.post_practice_words if w not in  self.first_word_list]
+        self.second_word_list = random.sample(population = self.post_first_word_list, k = 4)
+
         def verbal_task_stimuli(words):
             """
             Present a list of 4 words one at a time.
@@ -574,9 +588,12 @@ class aether_typing_study_experiment(klibs.Experiment):
             spatial_responses.append(resp)
         
         # Run the verbal task
-        word_list = ["Table", "House", "Garden", "Pencil"]
-        self.verbal_task_stimuli(word_list)
+        #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
+        self.verbal_task_stimuli(self.first_word_list)
         verbal_responses = []
+        print(self.practice_word_list)
+        print(self.first_word_list)
+        print(self.second_word_list)
         
         text_idx = self.text_order[typing_block_index]
         typing_block_index += 1
