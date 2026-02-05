@@ -114,6 +114,14 @@ class aether_typing_study_experiment(klibs.Experiment):
         # SPATIAL TASK: STIMULI
         #####################################
 
+        # Randomly generate three orders of target appearance
+            # (practice, first administration, second administration).
+        self.possible_spatial_targets = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] # All possible spatial targets (1-9)
+        self.spatial_order = random.sample(population = self.possible_spatial_targets, k = 4)
+        self.practice_spatial_order = random.sample(population = self.possible_spatial_targets, k = 4)
+        self.first_spatial_order = random.sample(population = self.possible_spatial_targets, k = 4)
+        self.second_spatial_order = random.sample(population = self.possible_spatial_targets, k = 4)
+
         def draw_spatial_grid(target_task_array=None):
             # --- Geometry ---
             array_size_deg = 3
@@ -286,9 +294,9 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         self.draw_spatial_search_array = draw_spatial_search_array
 
-        def spatial_search_array_stimuli():
+        def spatial_search_array_stimuli(target_list):
 
-            targets = ["1", "2", "3", "4"]
+            targets = target_list
 
             # initial blank
             self.draw_spatial_grid(target_task_array=None)
@@ -552,7 +560,8 @@ class aether_typing_study_experiment(klibs.Experiment):
         all_typed.append((text_idx, typed))
 
         # Run the spatial task
-        self.spatial_search_array_stimuli()
+        self.spatial_search_array_stimuli(self.first_spatial_order)
+        print(self.first_spatial_order)
         spatial_responses = []
 
         text_idx = self.text_order[typing_block_index]
