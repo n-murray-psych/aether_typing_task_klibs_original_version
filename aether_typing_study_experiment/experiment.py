@@ -598,21 +598,49 @@ class aether_typing_study_experiment(klibs.Experiment):
         # ---- DATA UNPACKING / SAFETY ----
 
         # Typed text: you *might* later have up to 3 typing blocks, so keep this pattern.
-        typed0 = all_typed[0][1] if len(all_typed) > 0 else None
+        typed_practice = all_typed[0][1] if len(all_typed) > 0 else None
         typed1 = all_typed[1][1] if len(all_typed) > 1 else None
         typed2 = all_typed[2][1] if len(all_typed) > 2 else None
+        typed3 = all_typed[3][1] if len(all_typed) > 3 else None
+        typed4 = all_typed[4][1] if len(all_typed) > 4 else None
+        typed5 = all_typed[5][1] if len(all_typed) > 5 else None
+        typed6 = all_typed[6][1] if len(all_typed) > 6 else None
 
         # Spatial: currently you have exactly ONE spatial block with 4 responses
-        s0 = spatial_responses[0][0] if len(spatial_responses) >0 else None
-        s1 = spatial_responses[1][0] if len(spatial_responses) >1 else None
-        s2 = spatial_responses[2][0] if len(spatial_responses) >2 else None
-        s3 = spatial_responses[3][0] if len(spatial_responses) >3 else None
+        s_practice1 = spatial_responses[0][0] if len(spatial_responses) >0 else None
+        s_practice2 = spatial_responses[1][0] if len(spatial_responses) >1 else None
+        s_practice3 = spatial_responses[2][0] if len(spatial_responses) >2 else None
+        s_practice4 = spatial_responses[3][0] if len(spatial_responses) >3 else None
+        s1 = spatial_responses[4][0] if len(spatial_responses) >4 else None
+        s2 = spatial_responses[5][0] if len(spatial_responses) >5 else None
+        s3 = spatial_responses[6][0] if len(spatial_responses) >6 else None
+        s4 = spatial_responses[7][0] if len(spatial_responses) >7 else None
+        s5 = spatial_responses[8][0] if len(spatial_responses) >8 else None
+        s6 = spatial_responses[9][0] if len(spatial_responses) >9 else None
+        s7 = spatial_responses[10][0] if len(spatial_responses) >10 else None
+        s8 = spatial_responses[11][0] if len(spatial_responses) >11 else None
+        s9 = spatial_responses[12][0] if len(spatial_responses) >12 else None
+        s10 = spatial_responses[13][0] if len(spatial_responses) >13 else None
+        s11 = spatial_responses[14][0] if len(spatial_responses) >14 else None
+        s12 = spatial_responses[15][0] if len(spatial_responses) >15 else None
 
         # Verbal: same idea as spatial
-        v0 = verbal_responses[0] if len(verbal_responses) >0 else None
-        v1 = verbal_responses[1] if len(verbal_responses) >1 else None
-        v2 = verbal_responses[2] if len(verbal_responses) >2 else None
-        v3 = verbal_responses[3] if len(verbal_responses) >3 else None
+        v_practice1 = verbal_responses[0] if len(verbal_responses) >0 else None
+        v_practice2 = verbal_responses[1] if len(verbal_responses) >1 else None
+        v_practice3 = verbal_responses[2] if len(verbal_responses) >2 else None
+        v_practice4 = verbal_responses[3] if len(verbal_responses) >3 else None
+        v1 = verbal_responses[4] if len(verbal_responses) >4 else None
+        v2 = verbal_responses[5] if len(verbal_responses) >5 else None
+        v3 = verbal_responses[6] if len(verbal_responses) >6 else None
+        v4 = verbal_responses[7] if len(verbal_responses) >7 else None
+        v5 = verbal_responses[8] if len(verbal_responses) >8 else None
+        v6 = verbal_responses[9] if len(verbal_responses) >9 else None
+        v7 = verbal_responses[10] if len(verbal_responses) >10 else None
+        v8 = verbal_responses[11] if len(verbal_responses) >11 else None
+        v9 = verbal_responses[12] if len(verbal_responses) >12 else None
+        v10 = verbal_responses[13] if len(verbal_responses) >13 else None
+        v11 = verbal_responses[14] if len(verbal_responses) >14 else None
+        v12 = verbal_responses[15] if len(verbal_responses) >15 else None
 
         # ---- DATA RETURN ----
         # Here we’re still returning ONE row for this "mega trial".
@@ -623,21 +651,50 @@ class aether_typing_study_experiment(klibs.Experiment):
             "trial_num": P.trial_number,
 
             # typed responses (from up to 3 typing blocks)
-            "typing_text0_resp": typed0,
-            "typing_text1_resp": typed1,
-            "typing_text2_resp": typed2,
+            "typed_practice": typed_practice,
+            "typed1": typed1,
+            "typed2": typed2,
+            "typed3": typed3,
+            "typed4": typed4,
+            "typed5": typed5,
+            "typed6": typed6,
 
             # spatial responses (4 clicks from the spatial block)
-            "spatial_response0": s0,
-            "spatial_response1": s1,
-            "spatial_response2": s2,
-            "spatial_response3": s3,
+            "spatial_practice1": s_practice1, 
+            "spatial_practice2": s_practice2,
+            "spatial_practice3": s_practice3,
+            "spatial_practice4": s_practice4,
+            "spatial_target1": s1, 
+            "spatial_target2": s2, 
+            "spatial_target3": s3, 
+            "spatial_target4": s4, 
+            "spatial_target5": s5, 
+            "spatial_target6": s6, 
+            "spatial_target7": s7, 
+            "spatial_target8": s8, 
+            "spatial_target9": s9, 
+            "spatial_target10": s10, 
+            "spatial_target11": s11, 
+            "spatial_target12": s12, 
 
             # verbal responses (4 recalls from the verbal block)
-            "verbal_response0": v0,
-            "verbal_response1": v1,
-            "verbal_response2": v2,
-            "verbal_response3": v3,
+            "verbal_practice1": v_practice1,
+            "verbal_practice2": v_practice2,
+            "verbal_practice3": v_practice3,
+            "verbal_practice4": v_practice4,
+            "verbal_target1": v1, 
+            "verbal_target2": v2, 
+            "verbal_target3": v3, 
+            "verbal_target4": v4, 
+            "verbal_target5": v5, 
+            "verbal_target6": v6, 
+            "verbal_target7": v7, 
+            "verbal_target8": v8, 
+            "verbal_target9": v9, 
+            "verbal_target10": v10, 
+            "verbal_target11": v11, 
+            "verbal_target12": v12, 
+
         }
     
     def trial_clean_up(self):
