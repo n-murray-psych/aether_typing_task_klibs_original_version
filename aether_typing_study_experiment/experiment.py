@@ -27,23 +27,20 @@ class aether_typing_study_experiment(klibs.Experiment):
         # TYPING TASK: STIMULI AND RESPONSES
         #####################################
 
+        practice_text = ["""On a quiet morning, the city feels temporarily paused, as if everyone has collectively agreed to sleep a little longer than usual. Streets that are normally busy with traffic remain empty, and the air carries a faint stillness that is rarely noticed during the day. The sounds that do exist become more noticeable: a distant bus braking at an intersection, the rhythmic footsteps of a jogger passing by, or the low hum of heating systems waking up inside nearby buildings. These small details often go unnoticed when life moves quickly, but they shape the texture of everyday experience. People tend to underestimate how much routine influences their perception of time. A familiar schedule can make hours pass without reflection, while a small change can suddenly slow everything down. Taking a different route to work, trying a new food for breakfast, or sitting in a different chair can create a surprising sense of awareness. These moments disrupt habit just enough to draw attention back to the present, reminding us that experience is not only about what happens, but how it is noticed. Technology plays an increasingly central role in shaping attention, often pulling it away from these quieter moments. Notifications, messages, and alerts compete constantly for focus, fragmenting thought into smaller and smaller pieces. While these tools can be useful, they can also make it difficult to stay with a single task for long. Writing, reading, or thinking deeply often requires sustained concentration, something that now feels less natural than it once did. Despite this, many people are rediscovering the value of deliberate focus. Activities like journaling, long-form reading, or practicing a skill without interruption can feel restorative. These practices encourage patience and allow mistakes to happen without immediate correction. Over time, this slower pace can improve accuracy, creativity, and confidence, even when speed is eventually required. In the end, productivity is not only about efficiency, but about balance. Moving quickly has its place, especially when deadlines approach, but slowing down can reveal insights that speed alone cannot provide. Paying attention to small details, allowing thoughts to unfold naturally, and accepting moments of quiet can make everyday tasks feel more intentional and meaningful."""]
+
         # Unique text samples
         self.left_texts = [
+            # Practice is index 0
             """On a quiet morning, the city feels temporarily paused, as if everyone has collectively agreed to sleep a little longer than usual. Streets that are normally busy with traffic remain empty, and the air carries a faint stillness that is rarely noticed during the day. The sounds that do exist become more noticeable: a distant bus braking at an intersection, the rhythmic footsteps of a jogger passing by, or the low hum of heating systems waking up inside nearby buildings. These small details often go unnoticed when life moves quickly, but they shape the texture of everyday experience. People tend to underestimate how much routine influences their perception of time. A familiar schedule can make hours pass without reflection, while a small change can suddenly slow everything down. Taking a different route to work, trying a new food for breakfast, or sitting in a different chair can create a surprising sense of awareness. These moments disrupt habit just enough to draw attention back to the present, reminding us that experience is not only about what happens, but how it is noticed. Technology plays an increasingly central role in shaping attention, often pulling it away from these quieter moments. Notifications, messages, and alerts compete constantly for focus, fragmenting thought into smaller and smaller pieces. While these tools can be useful, they can also make it difficult to stay with a single task for long. Writing, reading, or thinking deeply often requires sustained concentration, something that now feels less natural than it once did. Despite this, many people are rediscovering the value of deliberate focus. Activities like journaling, long-form reading, or practicing a skill without interruption can feel restorative. These practices encourage patience and allow mistakes to happen without immediate correction. Over time, this slower pace can improve accuracy, creativity, and confidence, even when speed is eventually required. In the end, productivity is not only about efficiency, but about balance. Moving quickly has its place, especially when deadlines approach, but slowing down can reveal insights that speed alone cannot provide. Paying attention to small details, allowing thoughts to unfold naturally, and accepting moments of quiet can make everyday tasks feel more intentional and meaningful.""", 
-            """Text sample B . . . """, 
-            """Text Sample C . . . """,
-            """Text sample D . . . """, 
-            """Text Sample E . . . """,
-            """Text sample F . . . """
+            """Text sample 1A . . . """, # Index 1
+            """Text sample 2A . . . """, # Index 2
+            """Text Sample 3A . . . """, # Index 3
+            """Text sample 1B . . . """, # Index 4
+            """Text Sample 2B . . . """, # Index 5
+            """Text sample 3B . . . """  # Index 6
         ]
-
-        # Set all possible text orders
-        text_indices = [0, 1, 2, 3, 4, 5, 6]
-        self.all_text_orders = list(itertools.permutations(text_indices))  # 6 permutations
-
-        # Random text order selection
-        self.text_order = random.choice(self.all_text_orders)
-
+        
         # Set all possible task orders
         task_labels = ["typing", "spatial", "verbal"]
         self.all_task_orders = list(itertools.permutations(task_labels))
@@ -488,10 +485,6 @@ class aether_typing_study_experiment(klibs.Experiment):
         
         self.run_verbal_block = run_verbal_block
 
-        # Randomize the task order
-        self.task_order = random.choice(self.all_task_orders)      # one of the 6 task orders
-        self.text_order = random.choice(self.all_text_orders)      # one of the 6 text orders
-            
     def block(self):
         pass
  
@@ -566,22 +559,18 @@ class aether_typing_study_experiment(klibs.Experiment):
         verbal_responses = []
 
         # Run the typing task (control, no working memory task)
-        typing_block_index = 0 # Text set to start from
-        text_idx = self.text_order[typing_block_index]
-        typing_block_index += 1
-
-        typed = self.run_typing_block(text_idx)
-        all_typed.append((text_idx, typed))
+        text_idx_1 = 1 # Text set to use, set by default to first set
+        typed = self.run_typing_block(text_idx_1)
+        all_typed.append((text_idx_1, typed))
 
         # Run the spatial task
         self.spatial_search_array_stimuli(self.first_spatial_order)
         print(self.first_spatial_order)
         spatial_responses = []
 
-        text_idx = self.text_order[typing_block_index]
-        typing_block_index += 1
-        typed = self.run_typing_block(text_idx)
-        all_typed.append((text_idx, typed))
+        text_idx_2 = 2 # Text set 2
+        typed = self.run_typing_block(text_idx_2)
+        all_typed.append((text_idx_2, typed))
 
         for n in range(1, 5): 
             resp = self.spatial_task_response_collector(which_n=n)
@@ -595,10 +584,12 @@ class aether_typing_study_experiment(klibs.Experiment):
         print(self.first_word_list)
         print(self.second_word_list)
         
-        text_idx = self.text_order[typing_block_index]
-        typing_block_index += 1
-        typed = self.run_typing_block(text_idx)
-        all_typed.append((text_idx, typed))
+        text_idx_3 = 3 # Text set 3
+        typed = self.run_typing_block(text_idx_3)
+        all_typed.append((text_idx_3, typed))
+        print(text_idx_1)
+        print(text_idx_2)
+        print(text_idx_3)
 
         for i in range(1, 5): 
             resp = self.verbal_task_response(str(i))
