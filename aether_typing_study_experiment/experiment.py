@@ -579,18 +579,12 @@ class aether_typing_study_experiment(klibs.Experiment):
         
         # Run the verbal task
         #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
-        self.verbal_task_stimuli(self.first_word_list)
+        self.verbal_task_stimuli(self.practice_word_list)
         verbal_responses = []
-        print(self.practice_word_list)
-        print(self.first_word_list)
-        print(self.second_word_list)
         
         text_idx_3 = 3 # Text set 3
         typed = self.run_typing_block(text_idx_3)
         all_typed.append((text_idx_3, typed))
-        print(text_idx_1)
-        print(text_idx_2)
-        print(text_idx_3)
 
         for i in range(1, 5): 
             resp = self.verbal_task_response(str(i))
@@ -623,42 +617,53 @@ class aether_typing_study_experiment(klibs.Experiment):
         s_practice3 = spatial_responses[2][0] if len(spatial_responses) >2 else None
         s_practice4 = spatial_responses[3][0] if len(spatial_responses) >3 else None
         
-
+        s1_stimuli = self.first_spatial_order[0]
+        s2_stimuli = self.first_spatial_order[1]
+        s3_stimuli = self.first_spatial_order[2]
+        s4_stimuli = self.first_spatial_order[3]  
         s1 = spatial_responses[4][0] if len(spatial_responses) >4 else None
         s2 = spatial_responses[5][0] if len(spatial_responses) >5 else None
         s3 = spatial_responses[6][0] if len(spatial_responses) >6 else None
         s4 = spatial_responses[7][0] if len(spatial_responses) >7 else None
         
-        
+        s5_stimuli = self.second_spatial_order[0]
+        s6_stimuli = self.second_spatial_order[1]
+        s7_stimuli = self.second_spatial_order[2]
+        s8_stimuli = self.second_spatial_order[3]  
         s5 = spatial_responses[8][0] if len(spatial_responses) >8 else None
         s6 = spatial_responses[9][0] if len(spatial_responses) >9 else None
         s7 = spatial_responses[10][0] if len(spatial_responses) >10 else None
         s8 = spatial_responses[11][0] if len(spatial_responses) >11 else None
         
-        
-        s9 = spatial_responses[12][0] if len(spatial_responses) >12 else None
-        s10 = spatial_responses[13][0] if len(spatial_responses) >13 else None
-        s11 = spatial_responses[14][0] if len(spatial_responses) >14 else None
-        s12 = spatial_responses[15][0] if len(spatial_responses) >15 else None
-
         # Verbal responses
+
+        v_practice1_stimuli = self.practice_word_list[0]
+        v_practice2_stimuli = self.practice_word_list[1]
+        v_practice3_stimuli = self.practice_word_list[2]
+        v_practice4_stimuli = self.practice_word_list[3]
         v_practice1 = verbal_responses[0] if len(verbal_responses) >0 else None
         v_practice2 = verbal_responses[1] if len(verbal_responses) >1 else None
         v_practice3 = verbal_responses[2] if len(verbal_responses) >2 else None
         v_practice4 = verbal_responses[3] if len(verbal_responses) >3 else None
+        
+        v1_stimuli = self.first_word_list[0]
+        v2_stimuli = self.first_word_list[1]
+        v3_stimuli = self.first_word_list[2]
+        v4_stimuli = self.first_word_list[3]
         v1 = verbal_responses[4] if len(verbal_responses) >4 else None
         v2 = verbal_responses[5] if len(verbal_responses) >5 else None
         v3 = verbal_responses[6] if len(verbal_responses) >6 else None
         v4 = verbal_responses[7] if len(verbal_responses) >7 else None
+        
+        v5_stimuli = self.second_word_list[0]
+        v6_stimuli = self.second_word_list[1]
+        v7_stimuli = self.second_word_list[2]
+        v8_stimuli = self.second_word_list[3]        
         v5 = verbal_responses[8] if len(verbal_responses) >8 else None
         v6 = verbal_responses[9] if len(verbal_responses) >9 else None
         v7 = verbal_responses[10] if len(verbal_responses) >10 else None
         v8 = verbal_responses[11] if len(verbal_responses) >11 else None
-        v9 = verbal_responses[12] if len(verbal_responses) >12 else None
-        v10 = verbal_responses[13] if len(verbal_responses) >13 else None
-        v11 = verbal_responses[14] if len(verbal_responses) >14 else None
-        v12 = verbal_responses[15] if len(verbal_responses) >15 else None
-
+    
         # ---- DATA RETURN ----
         # Here we’re still returning ONE row for this "mega trial".
         # You can unpack or summarize however you like, e.g.:
@@ -685,36 +690,48 @@ class aether_typing_study_experiment(klibs.Experiment):
             "spatial_practice2": s_practice2,
             "spatial_practice3": s_practice3,
             "spatial_practice4": s_practice4,
+            "s1_stimuli": s1_stimuli, 
+            "s2_stimuli": s2_stimuli,
+            "s3_stimuli": s3_stimuli,
+            "s4_stimuli": s4_stimuli,
             "spatial_target1": s1, 
             "spatial_target2": s2, 
             "spatial_target3": s3, 
             "spatial_target4": s4, 
+            "s5_stimuli": s5_stimuli, 
+            "s6_stimuli": s6_stimuli,
+            "s7_stimuli": s7_stimuli,
+            "s8_stimuli": s8_stimuli,            
             "spatial_target5": s5, 
             "spatial_target6": s6, 
             "spatial_target7": s7, 
             "spatial_target8": s8, 
-            "spatial_target9": s9, 
-            "spatial_target10": s10, 
-            "spatial_target11": s11, 
-            "spatial_target12": s12, 
 
             # verbal responses (4 recalls from the verbal block)
+            "v_practice1_stimuli": v_practice1_stimuli, 
+            "v_practice2_stimuli": v_practice2_stimuli,
+            "v_practice3_stimuli": v_practice3_stimuli,
+            "v_practice4_stimuli": v_practice4_stimuli,
             "verbal_practice1": v_practice1,
             "verbal_practice2": v_practice2,
             "verbal_practice3": v_practice3,
             "verbal_practice4": v_practice4,
+            "v1_stimuli": v1_stimuli, 
+            "v2_stimuli": v2_stimuli, 
+            "v3_stimuli": v3_stimuli, 
+            "v4_stimuli": v4_stimuli, 
             "verbal_target1": v1, 
             "verbal_target2": v2, 
             "verbal_target3": v3, 
             "verbal_target4": v4, 
+            "v5_stimuli": v5_stimuli, 
+            "v6_stimuli": v6_stimuli, 
+            "v7_stimuli": v7_stimuli, 
+            "v8_stimuli": v8_stimuli,             
             "verbal_target5": v5, 
             "verbal_target6": v6, 
             "verbal_target7": v7, 
             "verbal_target8": v8, 
-            "verbal_target9": v9, 
-            "verbal_target10": v10, 
-            "verbal_target11": v11, 
-            "verbal_target12": v12, 
 
         }
     
