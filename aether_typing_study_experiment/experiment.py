@@ -564,8 +564,9 @@ class aether_typing_study_experiment(klibs.Experiment):
         all_typed.append((text_idx_1, typed))
 
         # Run the spatial task
-        self.spatial_search_array_stimuli(self.first_spatial_order)
-        print(self.first_spatial_order)
+        self.spatial_search_array_stimuli(self.practice_spatial_order)
+        print(self.practice_spatial_order)
+        print(self.practice_spatial_order[0])
         spatial_responses = []
 
         text_idx_2 = 2 # Text set 2
@@ -597,34 +598,50 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         # ---- DATA UNPACKING / SAFETY ----
 
-        # Typed text: you *might* later have up to 3 typing blocks, so keep this pattern.
+        # Typed text responses
         typed_practice = all_typed[0][1] if len(all_typed) > 0 else None
+
         typed1 = all_typed[1][1] if len(all_typed) > 1 else None
+
         typed2 = all_typed[2][1] if len(all_typed) > 2 else None
+
         typed3 = all_typed[3][1] if len(all_typed) > 3 else None
+
         typed4 = all_typed[4][1] if len(all_typed) > 4 else None
+
         typed5 = all_typed[5][1] if len(all_typed) > 5 else None
+
         typed6 = all_typed[6][1] if len(all_typed) > 6 else None
 
-        # Spatial: currently you have exactly ONE spatial block with 4 responses
+        # Spatial assignments and responses
+        s_practice1_stimuli = self.practice_spatial_order[0]
+        s_practice2_stimuli = self.practice_spatial_order[1]
+        s_practice3_stimuli = self.practice_spatial_order[2]
+        s_practice4_stimuli = self.practice_spatial_order[3]
         s_practice1 = spatial_responses[0][0] if len(spatial_responses) >0 else None
         s_practice2 = spatial_responses[1][0] if len(spatial_responses) >1 else None
         s_practice3 = spatial_responses[2][0] if len(spatial_responses) >2 else None
         s_practice4 = spatial_responses[3][0] if len(spatial_responses) >3 else None
+        
+
         s1 = spatial_responses[4][0] if len(spatial_responses) >4 else None
         s2 = spatial_responses[5][0] if len(spatial_responses) >5 else None
         s3 = spatial_responses[6][0] if len(spatial_responses) >6 else None
         s4 = spatial_responses[7][0] if len(spatial_responses) >7 else None
+        
+        
         s5 = spatial_responses[8][0] if len(spatial_responses) >8 else None
         s6 = spatial_responses[9][0] if len(spatial_responses) >9 else None
         s7 = spatial_responses[10][0] if len(spatial_responses) >10 else None
         s8 = spatial_responses[11][0] if len(spatial_responses) >11 else None
+        
+        
         s9 = spatial_responses[12][0] if len(spatial_responses) >12 else None
         s10 = spatial_responses[13][0] if len(spatial_responses) >13 else None
         s11 = spatial_responses[14][0] if len(spatial_responses) >14 else None
         s12 = spatial_responses[15][0] if len(spatial_responses) >15 else None
 
-        # Verbal: same idea as spatial
+        # Verbal responses
         v_practice1 = verbal_responses[0] if len(verbal_responses) >0 else None
         v_practice2 = verbal_responses[1] if len(verbal_responses) >1 else None
         v_practice3 = verbal_responses[2] if len(verbal_responses) >2 else None
@@ -660,6 +677,10 @@ class aether_typing_study_experiment(klibs.Experiment):
             "typed6": typed6,
 
             # spatial responses (4 clicks from the spatial block)
+            "s_practice1_stimuli": s_practice1_stimuli, 
+            "s_practice2_stimuli": s_practice2_stimuli,
+            "s_practice3_stimuli": s_practice3_stimuli,
+            "s_practice4_stimuli": s_practice4_stimuli,
             "spatial_practice1": s_practice1, 
             "spatial_practice2": s_practice2,
             "spatial_practice3": s_practice3,
