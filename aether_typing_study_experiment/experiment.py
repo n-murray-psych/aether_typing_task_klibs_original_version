@@ -551,6 +551,9 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Task order counterbalanced
         ######################################################
 
+        # Practice task
+
+        
         # Control, spatial, verbal
 
         # Store all responses to be inspected and saved later
@@ -558,38 +561,73 @@ class aether_typing_study_experiment(klibs.Experiment):
         spatial_responses = []
         verbal_responses = []
 
-        # Run the typing task (control, no working memory task)
-        text_idx_1 = 1 # Text set to use, set by default to first set
-        typed = self.run_typing_block(text_idx_1)
-        all_typed.append((text_idx_1, typed))
+        if P.condition == "csv": 
 
-        # Run the spatial task
-        self.spatial_search_array_stimuli(self.practice_spatial_order)
-        print(self.practice_spatial_order)
-        print(self.practice_spatial_order[0])
-        spatial_responses = []
+            # Run the typing task (control, no working memory task)
+            text_idx_1 = 1 # Text set to use, set by default to first set
+            typed = self.run_typing_block(text_idx_1)
+            all_typed.append((text_idx_1, typed))
 
-        text_idx_2 = 2 # Text set 2
-        typed = self.run_typing_block(text_idx_2)
-        all_typed.append((text_idx_2, typed))
+            # Run the spatial task
+            self.spatial_search_array_stimuli(self.practice_spatial_order)
+            print(self.practice_spatial_order)
+            print(self.practice_spatial_order[0])
+            spatial_responses = []
 
-        for n in range(1, 5): 
-            resp = self.spatial_task_response_collector(which_n=n)
-            spatial_responses.append(resp)
-        
-        # Run the verbal task
-        #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
-        self.verbal_task_stimuli(self.practice_word_list)
-        verbal_responses = []
-        
-        text_idx_3 = 3 # Text set 3
-        typed = self.run_typing_block(text_idx_3)
-        all_typed.append((text_idx_3, typed))
+            text_idx_2 = 2 # Text set 2
+            typed = self.run_typing_block(text_idx_2)
+            all_typed.append((text_idx_2, typed))
 
-        for i in range(1, 5): 
-            resp = self.verbal_task_response(str(i))
-            verbal_responses.append(resp)
+            for n in range(1, 5): 
+                resp = self.spatial_task_response_collector(which_n=n)
+                spatial_responses.append(resp)
+            
+            # Run the verbal task
+            #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
+            self.verbal_task_stimuli(self.practice_word_list)
+            verbal_responses = []
+            
+            text_idx_3 = 3 # Text set 3
+            typed = self.run_typing_block(text_idx_3)
+            all_typed.append((text_idx_3, typed))
 
+            for i in range(1, 5): 
+                resp = self.verbal_task_response(str(i))
+                verbal_responses.append(resp)
+
+        elif P.condition == "cvs": 
+
+            # Run the typing task (control, no working memory task)
+            text_idx_1 = 1 # Text set to use, set by default to first set
+            typed = self.run_typing_block(text_idx_1)
+            all_typed.append((text_idx_1, typed))
+            
+            # Run the verbal task
+            #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
+            self.verbal_task_stimuli(self.practice_word_list)
+            verbal_responses = []
+            
+            text_idx_3 = 3 # Text set 3
+            typed = self.run_typing_block(text_idx_3)
+            all_typed.append((text_idx_3, typed))
+
+            for i in range(1, 5): 
+                resp = self.verbal_task_response(str(i))
+                verbal_responses.append(resp)
+
+            # Run the spatial task
+            self.spatial_search_array_stimuli(self.practice_spatial_order)
+            print(self.practice_spatial_order)
+            print(self.practice_spatial_order[0])
+            spatial_responses = []
+
+            text_idx_2 = 2 # Text set 2
+            typed = self.run_typing_block(text_idx_2)
+            all_typed.append((text_idx_2, typed))
+
+            for n in range(1, 5): 
+                resp = self.spatial_task_response_collector(which_n=n)
+                spatial_responses.append(resp)            
         # ---- DATA UNPACKING / SAFETY ----
 
         # Typed text responses
@@ -671,6 +709,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         return {
             "block_num": P.block_number,
             "trial_num": P.trial_number,
+            "condition": P.condition, 
 
             # typed responses (from up to 3 typing blocks)
             "typed_practice": typed_practice,
