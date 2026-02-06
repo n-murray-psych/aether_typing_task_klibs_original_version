@@ -557,10 +557,102 @@ class aether_typing_study_experiment(klibs.Experiment):
         verbal_responses = []
 
         ######################################################
+        # Set the text order
+        ######################################################
+
+        if P.condition in ["1", "2", "3", "4", "5", "6"]:
+            # Passage order: 1, 2, 3
+            text_idx_1 = 1
+            text_idx_4 = 4
+
+            text_idx_2 = 2
+            text_idx_5 = 5
+
+            text_idx_3 = 3
+            text_idx_6 = 6
+
+        if P.condition in ["7", "8", "9", "10", "11", "12"]:
+            # Passage order: 1, 3, 2
+            text_idx_1 = 1
+            text_idx_4 = 4
+
+            text_idx_2 = 3
+            text_idx_5 = 6
+
+            text_idx_3 = 2
+            text_idx_6 = 5
+
+        if P.condition in ["13", "14", "15", "16", "17", "18"]:
+            # Passage order: 2, 1, 3
+            text_idx_1 = 2
+            text_idx_4 = 5
+
+            text_idx_2 = 1
+            text_idx_5 = 4
+
+            text_idx_3 =  3
+            text_idx_6 = 6
+
+        if P.condition in ["19", "20", "21", "22", "23", "24"]:
+            # Passage order: 2, 3, 1
+            text_idx_1 = 2
+            text_idx_4 = 5
+
+            text_idx_2 = 3
+            text_idx_5 = 6
+
+            text_idx_3 = 1
+            text_idx_6 = 4
+
+        if P.condition in ["25", "26", "27", "28", "29", "30"]:
+            # Passage order: 3, 1, 2
+            text_idx_1 = 3
+            text_idx_4 = 6
+
+            text_idx_2 = 1
+            text_idx_5 = 4
+
+            text_idx_3 = 2
+            text_idx_6 = 5
+
+        if P.condition in ["31", "32", "33", "34", "35", "36"]:
+            # Passage order: 3, 2, 1
+            text_idx_1 = 3
+            text_idx_4 = 6
+
+            text_idx_2 = 2
+            text_idx_5 = 5
+
+            text_idx_3 = 1
+            text_idx_6 = 4
+
+        ######################################################
+        # Set the task order
+        ######################################################
+
+        if P.condition in ["1", "7", "13", "19", "25", "31"]:
+            task_order = "csv"
+
+        if P.condition in ["2", "8", "14", "20", "26", "32"]:
+            task_order = "cvs"
+
+        if P.condition in ["3", "9", "15", "21", "27", "33"]:
+            task_order = "scv"
+
+        if P.condition in ["4", "10", "16", "22", "28", "34"]:
+            task_order = "svc"
+
+        if P.condition in ["5", "11", "17", "23", "29", "35"]:
+            task_order = "vcs"
+
+        if P.condition in ["6", "12", "18", "24", "30", "36"]:
+            task_order = "vsc"
+
+        ######################################################
         # Control, spatial, verbal
         ######################################################
 
-        if P.condition == "csv": 
+        if task_order == "csv": 
 
             ####################
             # Practice
@@ -597,14 +689,12 @@ class aether_typing_study_experiment(klibs.Experiment):
             ####################
 
             # Run the typing task (control, no working memory task)
-            text_idx_1 = 1 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_1)
             all_typed.append((text_idx_1, typed))
 
             # Run the spatial task
             self.spatial_search_array_stimuli(self.first_spatial_order)
 
-            text_idx_2 = 2 # Text set 2
             typed = self.run_typing_block(text_idx_2)
             all_typed.append((text_idx_2, typed))
 
@@ -616,7 +706,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.first_word_list)
             
-            text_idx_3 = 3 # Text set 3
             typed = self.run_typing_block(text_idx_3)
             all_typed.append((text_idx_3, typed))
 
@@ -629,14 +718,12 @@ class aether_typing_study_experiment(klibs.Experiment):
             ####################
 
             # Run the typing task (control, no working memory task)
-            text_idx_4 = 4 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_4)
             all_typed.append((text_idx_1, typed))
 
             # Run the spatial task
             self.spatial_search_array_stimuli(self.second_spatial_order)
 
-            text_idx_5 = 5 # Text set 2
             typed = self.run_typing_block(text_idx_5)
             all_typed.append((text_idx_2, typed))
 
@@ -648,7 +735,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.second_word_list)
             
-            text_idx_6 = 6 # Text set 3
             typed = self.run_typing_block(text_idx_6)
             all_typed.append((text_idx_3, typed))
 
@@ -660,7 +746,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Control, verbal, spatial
         ######################################################
 
-        if P.condition == "cvs": 
+        if task_order == "cvs": 
 
             ####################
             # Practice
@@ -697,7 +783,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             ####################
 
             # Run the typing task (control, no working memory task)
-            text_idx_1 = 1 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_1)
             all_typed.append((text_idx_1, typed))
 
@@ -705,7 +790,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.first_word_list)
 
-            text_idx_2 = 2 # Text set 2
             typed = self.run_typing_block(text_idx_2)
             all_typed.append((text_idx_2, typed))
 
@@ -716,7 +800,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             # Run the spatial task
             self.spatial_search_array_stimuli(self.first_spatial_order)
             
-            text_idx_3 = 3 # Text set 3
             typed = self.run_typing_block(text_idx_3)
             all_typed.append((text_idx_3, typed))
 
@@ -729,7 +812,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             ####################
 
             # Run the typing task (control, no working memory task)
-            text_idx_4 = 4 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_4)
             all_typed.append((text_idx_1, typed))
 
@@ -737,7 +819,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.second_word_list)
 
-            text_idx_5 = 5 # Text set 2
             typed = self.run_typing_block(text_idx_5)
             all_typed.append((text_idx_2, typed))
 
@@ -748,7 +829,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             # Run the spatial task
             self.spatial_search_array_stimuli(self.second_spatial_order)
             
-            text_idx_6 = 6 # Text set 3
             typed = self.run_typing_block(text_idx_6)
             all_typed.append((text_idx_3, typed))
 
@@ -760,7 +840,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Spatial, verbal, control
         ######################################################
 
-        if P.condition == "svc": 
+        if task_order == "svc": 
 
             ####################
             # Practice
@@ -801,7 +881,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             self.spatial_search_array_stimuli(self.first_spatial_order)
 
             # Run the typing task (control, no working memory task)
-            text_idx_1 = 1 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_1)
             all_typed.append((text_idx_1, typed))
 
@@ -813,7 +892,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.first_word_list)
 
-            text_idx_2 = 2 # Text set 2
             typed = self.run_typing_block(text_idx_2)
             all_typed.append((text_idx_2, typed))
 
@@ -822,7 +900,6 @@ class aether_typing_study_experiment(klibs.Experiment):
                 verbal_responses.append(resp)   
             
             # Control
-            text_idx_3 = 3 # Text set 3
             typed = self.run_typing_block(text_idx_3)
             all_typed.append((text_idx_3, typed))
 
@@ -834,7 +911,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             self.spatial_search_array_stimuli(self.second_spatial_order)
 
             # Run the typing task (control, no working memory task)
-            text_idx_4 = 4 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_4)
             all_typed.append((text_idx_1, typed))
 
@@ -846,7 +922,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.second_word_list)
 
-            text_idx_5 = 5 # Text set 2
             typed = self.run_typing_block(text_idx_5)
             all_typed.append((text_idx_2, typed))
 
@@ -855,7 +930,6 @@ class aether_typing_study_experiment(klibs.Experiment):
                 verbal_responses.append(resp) 
             
             # Control
-            text_idx_6 = 6 # Text set 3
             typed = self.run_typing_block(text_idx_6)
             all_typed.append((text_idx_3, typed))
 
@@ -863,7 +937,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Spatial, control, verbal
         ######################################################
 
-        if P.condition == "scv": 
+        if task_order == "scv": 
 
             ####################
             # Practice
@@ -904,7 +978,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             self.spatial_search_array_stimuli(self.first_spatial_order)
 
             # Run the typing task (control, no working memory task)
-            text_idx_1 = 1 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_1)
             all_typed.append((text_idx_1, typed))
 
@@ -913,7 +986,6 @@ class aether_typing_study_experiment(klibs.Experiment):
                 spatial_responses.append(resp) 
 
             # Control
-            text_idx_2 = 2 # Text set 2
             typed = self.run_typing_block(text_idx_2)
             all_typed.append((text_idx_2, typed))
 
@@ -921,7 +993,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.first_word_list)
             
-            text_idx_3 = 3 # Text set 3
             typed = self.run_typing_block(text_idx_3)
             all_typed.append((text_idx_3, typed))
 
@@ -937,7 +1008,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             self.spatial_search_array_stimuli(self.second_spatial_order)
 
             # Run the typing task (control, no working memory task)
-            text_idx_4 = 4 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_4)
             all_typed.append((text_idx_1, typed))
 
@@ -946,7 +1016,6 @@ class aether_typing_study_experiment(klibs.Experiment):
                 spatial_responses.append(resp)
 
             # Control
-            text_idx_5 = 5 # Text set 2
             typed = self.run_typing_block(text_idx_5)
             all_typed.append((text_idx_2, typed))
 
@@ -954,7 +1023,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.second_word_list)
             
-            text_idx_6 = 6 # Text set 3
             typed = self.run_typing_block(text_idx_6)
             all_typed.append((text_idx_3, typed))
 
@@ -966,7 +1034,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Verbal, spatial, control
         ######################################################
 
-        if P.condition == "vsc": 
+        if task_order == "vsc": 
 
             ####################
             # Practice
@@ -1006,7 +1074,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.first_word_list)
 
-            text_idx_1 = 1 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_1)
             all_typed.append((text_idx_1, typed))
 
@@ -1017,7 +1084,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             # Run the spatial task
             self.spatial_search_array_stimuli(self.first_spatial_order)
 
-            text_idx_2 = 2 # Text set 2
             typed = self.run_typing_block(text_idx_2)
             all_typed.append((text_idx_2, typed))
 
@@ -1026,7 +1092,6 @@ class aether_typing_study_experiment(klibs.Experiment):
                 spatial_responses.append(resp) 
             
             # Control
-            text_idx_3 = 3 # Text set 3
             typed = self.run_typing_block(text_idx_3)
             all_typed.append((text_idx_3, typed))
 
@@ -1038,7 +1103,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.second_word_list)
 
-            text_idx_4 = 4 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_4)
             all_typed.append((text_idx_1, typed))
 
@@ -1049,7 +1113,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             # Run the spatial task
             self.spatial_search_array_stimuli(self.second_spatial_order)
 
-            text_idx_5 = 5 # Text set 2
             typed = self.run_typing_block(text_idx_5)
             all_typed.append((text_idx_2, typed))
 
@@ -1058,7 +1121,6 @@ class aether_typing_study_experiment(klibs.Experiment):
                 spatial_responses.append(resp)
             
             # Control
-            text_idx_6 = 6 # Text set 3
             typed = self.run_typing_block(text_idx_6)
             all_typed.append((text_idx_3, typed))
 
@@ -1066,7 +1128,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Verbal, control, spatial
         ######################################################
 
-        if P.condition == "vcs": 
+        if task_order == "vcs": 
 
             ####################
             # Practice
@@ -1106,7 +1168,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.first_word_list)
 
-            text_idx_1 = 1 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_1)
             all_typed.append((text_idx_1, typed))
 
@@ -1115,14 +1176,12 @@ class aether_typing_study_experiment(klibs.Experiment):
                 verbal_responses.append(resp)  
 
             # Control
-            text_idx_2 = 2 # Text set 2
             typed = self.run_typing_block(text_idx_2)
             all_typed.append((text_idx_2, typed))
 
             # Run the spatial task
             self.spatial_search_array_stimuli(self.first_spatial_order)
             
-            text_idx_3 = 3 # Text set 3
             typed = self.run_typing_block(text_idx_3)
             all_typed.append((text_idx_3, typed))
 
@@ -1138,7 +1197,6 @@ class aether_typing_study_experiment(klibs.Experiment):
             #word_list = ["Table", "House", "Garden", "Pencil"] # Just an example
             self.verbal_task_stimuli(self.second_word_list)
 
-            text_idx_4 = 4 # Text set to use, set by default to first set
             typed = self.run_typing_block(text_idx_4)
             all_typed.append((text_idx_1, typed))
 
@@ -1147,14 +1205,12 @@ class aether_typing_study_experiment(klibs.Experiment):
                 verbal_responses.append(resp) 
 
             # Control
-            text_idx_5 = 5 # Text set 2
             typed = self.run_typing_block(text_idx_5)
             all_typed.append((text_idx_2, typed))
 
             # Run the spatial task
             self.spatial_search_array_stimuli(self.second_spatial_order)            
             
-            text_idx_6 = 6 # Text set 3
             typed = self.run_typing_block(text_idx_6)
             all_typed.append((text_idx_3, typed))
 
