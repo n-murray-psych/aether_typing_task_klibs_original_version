@@ -571,6 +571,16 @@ class aether_typing_study_experiment(klibs.Experiment):
             text_idx_3 = 3
             text_idx_6 = 6
 
+            # Save passages
+            t1_stimuli = self.left_texts[1]
+            t4_stimuli = self.left_texts[4]
+
+            t2_stimuli = self.left_texts[2]
+            t5_stimuli = self.left_texts[5]
+
+            t3_stimuli = self.left_texts[3]
+            t6_stimuli = self.left_texts[6]
+
         if P.condition in ["7", "8", "9", "10", "11", "12"]:
             # Passage order: 1, 3, 2
             text_idx_1 = 1
@@ -581,6 +591,16 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             text_idx_3 = 2
             text_idx_6 = 5
+
+            # Save passages
+            t1_stimuli = self.left_texts[1]
+            t4_stimuli = self.left_texts[4]
+
+            t2_stimuli = self.left_texts[3]
+            t5_stimuli = self.left_texts[6]
+
+            t3_stimuli = self.left_texts[2]
+            t6_stimuli = self.left_texts[5]
 
         if P.condition in ["13", "14", "15", "16", "17", "18"]:
             # Passage order: 2, 1, 3
@@ -593,6 +613,16 @@ class aether_typing_study_experiment(klibs.Experiment):
             text_idx_3 =  3
             text_idx_6 = 6
 
+            # Save passages
+            t1_stimuli = self.left_texts[2]
+            t4_stimuli = self.left_texts[5]
+
+            t2_stimuli = self.left_texts[1]
+            t5_stimuli = self.left_texts[4]
+
+            t3_stimuli = self.left_texts[3]
+            t6_stimuli = self.left_texts[6]
+
         if P.condition in ["19", "20", "21", "22", "23", "24"]:
             # Passage order: 2, 3, 1
             text_idx_1 = 2
@@ -603,6 +633,16 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             text_idx_3 = 1
             text_idx_6 = 4
+
+            # Save passages
+            t1_stimuli = self.left_texts[2]
+            t4_stimuli = self.left_texts[5]
+
+            t2_stimuli = self.left_texts[3]
+            t5_stimuli = self.left_texts[6]
+
+            t3_stimuli = self.left_texts[1]
+            t6_stimuli = self.left_texts[4]
 
         if P.condition in ["25", "26", "27", "28", "29", "30"]:
             # Passage order: 3, 1, 2
@@ -615,6 +655,16 @@ class aether_typing_study_experiment(klibs.Experiment):
             text_idx_3 = 2
             text_idx_6 = 5
 
+            # Save passages
+            t1_stimuli = self.left_texts[3]
+            t4_stimuli = self.left_texts[6]
+
+            t2_stimuli = self.left_texts[1]
+            t5_stimuli = self.left_texts[4]
+
+            t3_stimuli = self.left_texts[2]
+            t6_stimuli = self.left_texts[5]
+
         if P.condition in ["31", "32", "33", "34", "35", "36"]:
             # Passage order: 3, 2, 1
             text_idx_1 = 3
@@ -625,6 +675,16 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             text_idx_3 = 1
             text_idx_6 = 4
+
+            # Save passages
+            t1_stimuli = self.left_texts[3]
+            t4_stimuli = self.left_texts[6]
+
+            t2_stimuli = self.left_texts[2]
+            t5_stimuli = self.left_texts[5]
+
+            t3_stimuli = self.left_texts[1]
+            t6_stimuli = self.left_texts[4]
 
         ######################################################
         # Set the task order
@@ -1227,11 +1287,17 @@ class aether_typing_study_experiment(klibs.Experiment):
         typed_practice1 = all_typed[0][1] if len(all_typed) > 0 else None
         typed_practice2 = all_typed[1][1] if len(all_typed) > 1 else None
         typed_practice3 = all_typed[2][1] if len(all_typed) > 2 else None
+        t1_stimuli = t1_stimuli
         typed1 = all_typed[3][1] if len(all_typed) > 3 else None
+        t2_stimuli = t2_stimuli
         typed2 = all_typed[4][1] if len(all_typed) > 4 else None
+        t3_stimuli = t3_stimuli
         typed3 = all_typed[5][1] if len(all_typed) > 5 else None
+        t4_stimuli = t4_stimuli
         typed4 = all_typed[6][1] if len(all_typed) > 6 else None
+        t5_stimuli = t5_stimuli
         typed5 = all_typed[7][1] if len(all_typed) > 7 else None
+        t6_stimuli = t6_stimuli
         typed6 = all_typed[8][1] if len(all_typed) > 8 else None
 
         # Spatial assignments and responses
@@ -1304,11 +1370,17 @@ class aether_typing_study_experiment(klibs.Experiment):
             "typed_practice1": typed_practice1,
             "typed_practice2": typed_practice2,
             "typed_practice3": typed_practice3,
+            "t1_stimuli": t1_stimuli, 
             "typed1": typed1,
+            "t2_stimuli": t2_stimuli, 
             "typed2": typed2,
+            "t3_stimuli": t3_stimuli, 
             "typed3": typed3,
+            "t4_stimuli": t4_stimuli, 
             "typed4": typed4,
+            "t5_stimuli": t5_stimuli, 
             "typed5": typed5,
+            "t6_stimuli": t6_stimuli, 
             "typed6": typed6,
 
             # spatial responses (4 clicks from the spatial block)
