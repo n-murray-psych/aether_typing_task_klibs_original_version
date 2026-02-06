@@ -44,7 +44,11 @@ saccadic_motion_threshold = 0.15
 multi_session_project = False
 trials_per_block = 0
 blocks_per_experiment = 1
-conditions = ["csv", "cvs"]
+conditions = [
+    "csv", "cvs", 
+    "svc", "svc", 
+    "vsc", "vcs"
+]
 default_condition = None
 
 #########################################
