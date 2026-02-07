@@ -48,6 +48,22 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Define typing task and attach it to self
         def typing_task(text_index):
 
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You will now have to copy the text you see on the left side of the screen as accurately as you can.\n" \
+                "Remember, the BACKSPACE key is disabled, so you cannot edit what you wrote.\n\n"
+                "You will have 2 minutes and 30 seconds to write.\n"
+                "Press SPACE to start.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
+            any_key()  # wait specifically for SPACE
+
             add_text_style(label = "timer_text", size = 48)
 
             # Left column text
@@ -295,14 +311,29 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             targets = target_list
 
-            # initial blank
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "Remember in order which four squares turn black.\n\n"
+                "Press SPACE to start.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
             self.draw_spatial_grid(target_task_array=None)
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
             flip()
 
+            any_key() 
+
+            # --- Initial blank (1 s) ---
             start_timer = CountDown(1.0)
             while start_timer.counting():
                 pump(True)
+                self.draw_spatial_grid(target_task_array=None)
+                flip()
 
+            # --- Target sequence ---
             for i, target in enumerate(targets):
 
                 # 1 second target
@@ -319,6 +350,7 @@ class aether_typing_study_experiment(klibs.Experiment):
                         pump(True)
                         self.draw_spatial_grid(None)
                         flip()
+
 
         self.spatial_search_array_stimuli = spatial_search_array_stimuli
 
@@ -413,7 +445,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # Instruction screen
             instr = message(
-                "Remember the following list of words",
+                "Remember the following list of words. \n Press SPACE to start.",
                 style="default",
                 align="center",
                 blit_txt=False
@@ -485,6 +517,132 @@ class aether_typing_study_experiment(klibs.Experiment):
         
         self.run_verbal_block = run_verbal_block
 
+        ###################################################
+        # Create task demo functions
+        ###################################################
+
+        def typing_task_demo():
+
+            # 1) Instruction screen
+            instr_text = (
+                "For the typing task, you will see some text on the left side of the screen, "
+                "and some space on the right side to type.\n\n"
+                "Your task is to copy the text you see on the left side, as accurately as you can. \n"
+                "Importantly, the backspace key is disabled, so you cannot edit the text you are writing."
+            )
+
+            instr_msg = message(
+                instr_text,
+                align="center",
+                wrap_width=int(P.screen_x * 0.8),
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=P.screen_c)
+            flip()
+            any_key()  # wait for participant to continue
+
+            # 2) Static demo of the practice typing screen layout
+            left_demo_text = self.left_texts[0]  # practice passage
+
+            left_demo_msg = message(
+                left_demo_text,
+                align="left",
+                wrap_width=int(P.screen_x * 0.45),
+                blit_txt=False,
+            )
+
+            right_demo_msg = message(
+                "Typed text will appear here in the real task. \n You will see a timer allowing you 2 minutes and 30 seconds to type.",
+                align="left",
+                blit_txt=False,
+            )
+
+            fill()
+
+            # Left-side passage (same position as typing_task)
+            blit(
+                left_demo_msg,
+                registration=1,
+                location=(int(P.screen_x * 0.05), int(P.screen_y * 0.84)),
+            )
+
+            # Right-side "typing area" demo (approximate position of input)
+            blit(
+                right_demo_msg,
+                registration=5,
+                location=(int(P.screen_x * 0.75), int(P.screen_y * 0.22)),
+            )
+
+            flip()
+            any_key()  # continue into the actual task
+
+        self.typing_task_demo = typing_task_demo
+
+        ######################################################
+        # Verbal task demo 
+        ######################################################
+
+        def verbal_task_demo():
+
+            verbal_instr_text = (
+                "For the word task, you will be asked to look at the centre of the screen, "
+                "and read some words as they appear.\n\n"
+                "Your task will be to remember the words in order, so that you can recall them later.\n\n"
+                "Press SPACE to see an example list of words."
+            )
+
+            verbal_instr_msg = message(
+                verbal_instr_text,
+                align="center",
+                wrap_width=int(P.screen_x * 0.8),
+                blit_txt=False,
+            )
+
+            fill()
+            blit(verbal_instr_msg, registration=5, location=P.screen_c)
+            flip()
+
+            any_key()
+
+            # Show the four practice words using your existing verbal routine
+            self.verbal_task_stimuli(self.practice_word_list)
+
+        self.verbal_task_demo = verbal_task_demo
+
+        ######################################################
+        # Spatial task demo
+        ######################################################
+
+        def spatial_task_demo():
+
+            spatial_instr_text = (
+                "For the grid task, you will be asked to look at a grid at the centre of the screen, "
+                "and watch some of the squares in the grid turn black.\n\n"
+                "Your task will be to remember which squares turned black in order, "
+                "so you can click each square that turned black later.\n\n"
+                "Press SPACE to see an example."
+            )
+
+            spatial_instr_msg = message(
+                spatial_instr_text,
+                align="center",
+                wrap_width=int(P.screen_x * 0.8),
+                blit_txt=False,
+            )
+
+            fill()
+            blit(spatial_instr_msg, registration=5, location=P.screen_c)
+            flip()
+
+            any_key()
+            self.spatial_search_array_stimuli(self.practice_spatial_order)
+
+            # --- Show what the response screen looks like ---
+
+        self.spatial_task_demo = spatial_task_demo
+
     def block(self):
         pass
  
@@ -511,15 +669,42 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def trial(self):
 
-        # Set your response variables to NONE when you're testing the development of other tasks.
-        #typed_text = None
-        #spatial_response = None
-        #verbal_response = None
+        ######################################################
+        # Task Demo
+        ######################################################
 
-        # Define the response collector as a function within the trial 
-        # so all this code doesn't have to be written over and over again
-        # every time you run the response collector.
+        demo_text = (
+            "For this study, you will be asked to complete three different tasks. \n We will now show you what each of those three tasks looks like. \n After this tutorial, you will get an opportunity to practice. \n\n Press SPACE to continue."
+        )
 
+        demo_msg = message(
+            demo_text, 
+            align = "center", 
+            wrap_width=int(P.screen_x * 0.8),
+            blit_txt=False
+        )
+
+        fill()
+        blit(demo_msg, registration=5, location=P.screen_c)
+        flip()
+        any_key()
+
+        self.spatial_task_demo()
+        self.verbal_task_demo()
+        self.typing_task_demo()
+
+        # --- Instruction screen over blank grid ---
+        instr_msg = message(
+            "You have completed the task demo.\n Press SPACE to begin the practice."
+            align="center",
+            blit_txt=False,
+        )
+
+        fill()
+        blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+        flip()
+
+        any_key()  # wait specifically for SPACE
         def spatial_task_response_collector(which_n):
             """
             which_n: 1, 2, 3, or 4 indicating first/second/third/fourth target
@@ -744,6 +929,17 @@ class aether_typing_study_experiment(klibs.Experiment):
                 resp = self.verbal_task_response(str(i))
                 verbal_responses.append(resp)
 
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
             ####################
             # First run
             ####################
@@ -837,6 +1033,17 @@ class aether_typing_study_experiment(klibs.Experiment):
             for n in range(1, 5): 
                 resp = self.spatial_task_response_collector(which_n=n)
                 spatial_responses.append(resp)
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
 
             ####################
             # First run
@@ -932,6 +1139,17 @@ class aether_typing_study_experiment(klibs.Experiment):
             # Control task
             typed = self.run_typing_block(text_practice)
             all_typed.append((text_practice, typed))
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
 
             ####################
             # First run
@@ -1030,6 +1248,17 @@ class aether_typing_study_experiment(klibs.Experiment):
                 resp = self.verbal_task_response(str(i))
                 verbal_responses.append(resp)
 
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
             ####################
             # First run
             ####################
@@ -1126,6 +1355,17 @@ class aether_typing_study_experiment(klibs.Experiment):
             typed = self.run_typing_block(text_practice)
             all_typed.append((text_practice, typed))
 
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
             ####################
             # First run
             ####################
@@ -1219,6 +1459,17 @@ class aether_typing_study_experiment(klibs.Experiment):
             for n in range(1, 5): 
                 resp = self.spatial_task_response_collector(which_n=n)
                 spatial_responses.append(resp)
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
 
             ####################
             # First run
