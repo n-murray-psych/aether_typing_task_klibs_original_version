@@ -46,6 +46,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         self.all_task_orders = list(itertools.permutations(task_labels))
 
         # Define typing task and attach it to self
+
         def typing_task(text_index):
 
             # --- Instruction screen over blank grid ---
@@ -66,17 +67,43 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             add_text_style(label = "timer_text", size = 48)
 
+            # Ensure a large text style for the practice banner (only defined once)
+            if not hasattr(self, "_practice_style_defined"):
+                add_text_style(label="practice_banner", size=48)
+                self._practice_style_defined = True
+
             # Left column text
             left_text = self.left_texts[text_index]
+
+            # Is this the practice passage? (index 0)
+            is_practice = (text_index == 0)
+
+            def draw_practice_banner():
+                if not is_practice:
+                    return
+                banner_w, banner_h = 420, 90
+                banner = Rectangle(banner_w, banner_h, fill=(176, 0, 0))
+                practice_msg = message(
+                    "PRACTICE",
+                    style="practice_banner",
+                    align="center",
+                    blit_txt=False,
+                )
+                banner_x = P.screen_c[0]
+                banner_y = int(P.screen_y * 0.9)
+                blit(banner, registration=5, location=(banner_x, banner_y))
+                blit(practice_msg, registration=5, location=(banner_x, banner_y))
 
             def draw_left():
                 msg = message(
                     left_text,
                     align="left",
                     wrap_width=int(P.screen_x * 0.45),
-                    blit_txt=False 
+                    blit_txt=False
                 )
                 blit(msg, 1, (int(P.screen_x * 0.05), int(P.screen_y * 0.84)))
+                # PRACTICE banner on left-draw frames too
+                draw_practice_banner()
 
             q = user_queries.experimental[0]
 
@@ -109,8 +136,11 @@ class aether_typing_study_experiment(klibs.Experiment):
                 blit(eraser, 5, (timer_x, timer_y))
 
                 sec_left = int(self.timer.remaining())
-                timer_surface = message(mmss(sec_left), style = "timer_text", blit_txt=False)
+                timer_surface = message(mmss(sec_left), style="timer_text", blit_txt=False)
                 blit(timer_surface, 5, (timer_x, timer_y))
+
+                # PRACTICE banner on timer-draw frames
+                draw_practice_banner()
 
             # Run the query and RETURN the typed text
             typed_text = query_no_backspace(
@@ -311,6 +341,30 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             targets = target_list
 
+            # Ensure style for practice banner
+            if not hasattr(self, "_practice_style_defined"):
+                add_text_style(label="practice_banner", size=48)
+                self._practice_style_defined = True
+
+            # Is this the practice sequence?
+            is_practice = (targets == self.practice_spatial_order)
+
+            def draw_practice_banner():
+                if not is_practice:
+                    return
+                banner_w, banner_h = 420, 90
+                banner = Rectangle(banner_w, banner_h, fill=(176, 0, 0))
+                practice_msg = message(
+                    "PRACTICE",
+                    style="practice_banner",
+                    align="center",
+                    blit_txt=False,
+                )
+                banner_x = P.screen_c[0]
+                banner_y = int(P.screen_y * 0.9)
+                blit(banner, registration=5, location=(banner_x, banner_y))
+                blit(practice_msg, registration=5, location=(banner_x, banner_y))
+
             # --- Instruction screen over blank grid ---
             instr_msg = message(
                 "Remember in order which four squares turn black.\n\n"
@@ -322,15 +376,17 @@ class aether_typing_study_experiment(klibs.Experiment):
             fill()
             self.draw_spatial_grid(target_task_array=None)
             blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            draw_practice_banner()
             flip()
 
-            any_key() 
+            any_key()
 
             # --- Initial blank (1 s) ---
             start_timer = CountDown(1.0)
             while start_timer.counting():
                 pump(True)
                 self.draw_spatial_grid(target_task_array=None)
+                draw_practice_banner()
                 flip()
 
             # --- Target sequence ---
@@ -341,6 +397,7 @@ class aether_typing_study_experiment(klibs.Experiment):
                 while stim_timer.counting():
                     pump(True)
                     self.draw_spatial_grid(target)
+                    draw_practice_banner()
                     flip()
 
                 # 200 ms blank
@@ -349,8 +406,8 @@ class aether_typing_study_experiment(klibs.Experiment):
                     while isi_timer.counting():
                         pump(True)
                         self.draw_spatial_grid(None)
+                        draw_practice_banner()
                         flip()
-
 
         self.spatial_search_array_stimuli = spatial_search_array_stimuli
 
@@ -443,6 +500,30 @@ class aether_typing_study_experiment(klibs.Experiment):
             # Basic safety: if more than 4 provided, just use the first 4
             words = list(words)[:4]
 
+            # Ensure style for practice banner
+            if not hasattr(self, "_practice_style_defined"):
+                add_text_style(label="practice_banner", size=48)
+                self._practice_style_defined = True
+
+            # Is this the practice word list?
+            is_practice = (words == self.practice_word_list[:len(words)])
+
+            def draw_practice_banner():
+                if not is_practice:
+                    return
+                banner_w, banner_h = 420, 90
+                banner = Rectangle(banner_w, banner_h, fill=(176, 0, 0))
+                practice_msg = message(
+                    "PRACTICE",
+                    style="practice_banner",
+                    align="center",
+                    blit_txt=False,
+                )
+                banner_x = P.screen_c[0]
+                banner_y = int(P.screen_y * 0.9)
+                blit(banner, registration=5, location=(banner_x, banner_y))
+                blit(practice_msg, registration=5, location=(banner_x, banner_y))
+
             # Instruction screen
             instr = message(
                 "Remember the following list of words. \n Press SPACE to start.",
@@ -453,6 +534,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             fill()
             blit(instr, registration=5, location=P.screen_c)
+            draw_practice_banner()
             flip()
             any_key()  # wait for participant to be ready
 
@@ -470,11 +552,10 @@ class aether_typing_study_experiment(klibs.Experiment):
                 # --- Show word for 1 second ---
                 word_timer = CountDown(1.0)  # 1 second
                 while word_timer.counting():
-                    # Keep KLibs responsive
                     pump(True)
-
                     fill()
                     blit(word_msg, registration=5, location=P.screen_c)
+                    draw_practice_banner()
                     flip()
 
                 # --- 200 ms blank interval before next word ---
@@ -483,6 +564,7 @@ class aether_typing_study_experiment(klibs.Experiment):
                     while gap_timer.counting():
                         pump(True)
                         fill()
+                        draw_practice_banner()
                         flip()
 
         self.verbal_task_stimuli = verbal_task_stimuli
