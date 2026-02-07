@@ -491,7 +491,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Define the block orders for each task
         ########################################
 
-        def run_typing_block(text_index): 
+        def run_typing_block(text_index):
             typed_text = self.typing_task(text_index)
             return typed_text
         
@@ -689,22 +689,6 @@ class aether_typing_study_experiment(klibs.Experiment):
         flip()
         any_key()
 
-        self.spatial_task_demo()
-        self.verbal_task_demo()
-        self.typing_task_demo()
-
-        # --- Instruction screen over blank grid ---
-        instr_msg = message(
-            "You have completed the task demo.\n Press SPACE to begin the practice."
-            align="center",
-            blit_txt=False,
-        )
-
-        fill()
-        blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
-        flip()
-
-        any_key()  # wait specifically for SPACE
         def spatial_task_response_collector(which_n):
             """
             which_n: 1, 2, 3, or 4 indicating first/second/third/fourth target
@@ -899,6 +883,23 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         if task_order == "csv": 
 
+            self.typing_task_demo()
+            self.spatial_task_demo()
+            self.verbal_task_demo()
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the task demo.\n Press SPACE to begin the practice.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
+            any_key()  # wait specifically for SPACE
+
             ####################
             # Practice
             ####################
@@ -931,7 +932,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # --- Instruction screen over blank grid ---
             instr_msg = message(
-                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study.",
                 align="center",
                 blit_txt=False,
             )
@@ -1004,6 +1005,23 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         if task_order == "cvs": 
 
+            self.typing_task_demo()
+            self.verbal_task_demo()
+            self.spatial_task_demo()
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the task demo.\n Press SPACE to begin the practice.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
+            any_key()  # wait specifically for SPACE
+
             ####################
             # Practice
             ####################
@@ -1036,7 +1054,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # --- Instruction screen over blank grid ---
             instr_msg = message(
-                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study.",
                 align="center",
                 blit_txt=False,
             )
@@ -1109,6 +1127,23 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         if task_order == "svc": 
 
+            self.spatial_task_demo()
+            self.verbal_task_demo()
+            self.typing_task_demo()
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the task demo.\n Press SPACE to begin the practice.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
+            any_key()  # wait specifically for SPACE
+
             ####################
             # Practice
             ####################
@@ -1142,7 +1177,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # --- Instruction screen over blank grid ---
             instr_msg = message(
-                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study.",
                 align="center",
                 blit_txt=False,
             )
@@ -1217,6 +1252,23 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         if task_order == "scv": 
 
+            self.spatial_task_demo()
+            self.typing_task_demo()
+            self.verbal_task_demo()
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the task demo.\n Press SPACE to begin the practice.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
+            any_key()  # wait specifically for SPACE
+
             ####################
             # Practice
             ####################
@@ -1250,7 +1302,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # --- Instruction screen over blank grid ---
             instr_msg = message(
-                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study.",
                 align="center",
                 blit_txt=False,
             )
@@ -1325,6 +1377,23 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         if task_order == "vsc": 
 
+            self.verbal_task_demo()
+            self.spatial_task_demo()
+            self.typing_task_demo()
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the task demo.\n Press SPACE to begin the practice.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
+            any_key()  # wait specifically for SPACE
+
             ####################
             # Practice
             ####################
@@ -1357,7 +1426,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # --- Instruction screen over blank grid ---
             instr_msg = message(
-                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study.",
                 align="center",
                 blit_txt=False,
             )
@@ -1430,6 +1499,23 @@ class aether_typing_study_experiment(klibs.Experiment):
 
         if task_order == "vcs": 
 
+            self.verbal_task_demo()
+            self.typing_task_demo()
+            self.spatial_task_demo()
+
+            # --- Instruction screen over blank grid ---
+            instr_msg = message(
+                "You have completed the task demo.\n Press SPACE to begin the practice.",
+                align="center",
+                blit_txt=False,
+            )
+
+            fill()
+            blit(instr_msg, registration=5, location=(P.screen_c[0], int(P.screen_y * 0.25)))
+            flip()
+
+            any_key()  # wait specifically for SPACE
+
             ####################
             # Practice
             ####################
@@ -1462,7 +1548,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # --- Instruction screen over blank grid ---
             instr_msg = message(
-                "You have completed the PRACTICE trials.\n Press SPACE to begin the study."
+                "You have completed the PRACTICE trials.\n Press SPACE to begin the study.",
                 align="center",
                 blit_txt=False,
             )
