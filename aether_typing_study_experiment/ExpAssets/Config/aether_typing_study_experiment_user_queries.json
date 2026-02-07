@@ -187,5 +187,89 @@
             "anonymous_value": "n", 
             "active": true
         }
+    ],
+    "survey1": [
+        {
+            "title": "survey1", 
+            "database_field": "survey1", 
+            "query": "What technology have you used for typewriting in English in the last year? \n \n Please type your response. \n\n 1: Mechanical/membrane keyboard \n 2: On-screen keyboard \n 3: Other (specify)", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey2": [
+        {
+            "title": "survey2", 
+            "database_field": "survey2", 
+            "query": "What is your most used keyboard layout for typewriting in English in the past year using this technology? \n Please type your response. \n\n 1: AZERTY \n 2: Colemak \n 3: Dvorak \n 4: QWERTY \n 5: Workman \n 6: Other (specify)", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey3": [
+        {
+            "title": "survey3", 
+            "database_field": "survey3", 
+            "query": "How often have you engaged in typewriting in English in the past year using this technology? \n Please type your response. \n\n 1: Daily or Almost Daily \n 2: Weekly or Almost Weekly \n 3: Monthly or Almost Monthly \n 4: Never or Almost Never", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey4": [
+        {
+            "title": "survey4", 
+            "database_field": "survey4", 
+            "query": "How often have you touch-typed in English in the past year using this technology? \n Please type your response. \n\n 1: Daily or Almost Daily \n 2: Weekly or Almost Weekly \n 3: Monthly or Almost Monthly \n 4: Never or Almost Never", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
     ]
 }

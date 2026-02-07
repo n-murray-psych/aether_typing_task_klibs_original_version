@@ -119,6 +119,10 @@ CREATE TABLE trials (
     verbal_target5 text not null, 
     verbal_target6 text not null, 
     verbal_target7 text not null, 
-    verbal_target8 text not null
+    verbal_target8 text not null, 
+    survey1 text not null,
+    survey2 text not null,
+    survey3 text not null,
+    survey4 text not null
 
 );

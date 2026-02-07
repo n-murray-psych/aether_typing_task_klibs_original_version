@@ -23,6 +23,24 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def setup(self):
 
+        # Helper function for centering queries
+        def centre_query(q, y_offset_query=-60, y_offset_input=200, y_offset_error=90):
+            cx, cy = P.screen_c
+            q.format.positions = AttributeDict({
+                "locations": AttributeDict({
+                    "query": [cx, cy + y_offset_query],
+                    "input": [cx, cy + y_offset_input],
+                    "error": [cx, cy + y_offset_error],
+                }),
+                "registrations": AttributeDict({
+                    "query": 5,
+                    "input": 5,
+                    "error": 5,
+                }),
+            })
+
+        self.centre_query = centre_query
+
         #####################################
         # TYPING TASK: STIMULI AND RESPONSES
         #####################################
@@ -1697,6 +1715,26 @@ class aether_typing_study_experiment(klibs.Experiment):
                 resp = self.spatial_task_response_collector(which_n=n)
                 spatial_responses.append(resp)
 
+        ###############################################################
+        # Survey question queries
+        ###############################################################
+
+        q = user_queries.survey1[0]
+        self.centre_query(q)
+        survey1 = query(q)
+
+        q = user_queries.survey2[0]
+        self.centre_query(q)
+        survey2 = query(q)
+
+        q = user_queries.survey3[0]
+        self.centre_query(q)
+        survey3 = query(q)
+
+        q = user_queries.survey4[0]
+        self.centre_query(q)
+        survey4 = query(q)
+        
 ########################################################   
         # ---- DATA UNPACKING / SAFETY ----
 ########################################################
@@ -1853,6 +1891,11 @@ class aether_typing_study_experiment(klibs.Experiment):
             "verbal_target6": v6, 
             "verbal_target7": v7, 
             "verbal_target8": v8, 
+
+            "survey1": survey1, 
+            "survey2": survey2, 
+            "survey3": survey3, 
+            "survey4": survey4
 
         }
     
