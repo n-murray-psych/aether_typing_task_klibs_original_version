@@ -1103,7 +1103,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Control, verbal, spatial
         ######################################################
 
-        if task_order == "cvs": 
+        elif task_order == "cvs": 
 
             self.typing_task_demo()
             self.verbal_task_demo()
@@ -1225,7 +1225,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Spatial, verbal, control
         ######################################################
 
-        if task_order == "svc": 
+        elif task_order == "svc": 
 
             self.spatial_task_demo()
             self.verbal_task_demo()
@@ -1350,7 +1350,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Spatial, control, verbal
         ######################################################
 
-        if task_order == "scv": 
+        elif task_order == "scv": 
 
             self.spatial_task_demo()
             self.typing_task_demo()
@@ -1475,7 +1475,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Verbal, spatial, control
         ######################################################
 
-        if task_order == "vsc": 
+        elif task_order == "vsc": 
 
             self.verbal_task_demo()
             self.spatial_task_demo()
@@ -1597,7 +1597,7 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Verbal, control, spatial
         ######################################################
 
-        if task_order == "vcs": 
+        elif task_order == "vcs": 
 
             self.verbal_task_demo()
             self.typing_task_demo()
