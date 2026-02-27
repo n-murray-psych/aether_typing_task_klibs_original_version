@@ -6,7 +6,7 @@ import klibs
 from klibs import P
 from klibs.KLUserInterface import any_key, mouse_pos, get_clicks
 from klibs.KLGraphics import fill, blit, flip, KLDraw as kld  # kld to draw shapes on the screen
-from klibs.KLCommunication import user_queries, query, query_no_backspace, message
+from klibs.KLCommunication import user_queries, query, message
 from klibs.KLUtilities import deg_to_px
 from klibs.KLJSON_Object import AttributeDict
 from klibs.KLTime import CountDown
@@ -23,6 +23,218 @@ class aether_typing_study_experiment(klibs.Experiment):
 
     def setup(self):
 
+        def query_no_backspace(query_ob, anonymous=False, draw_left_fn=None, draw_timer_fn=None):
+            """
+            NEW: hard-freezes query/input/error positions into local variables so they cannot drift.
+            NEW: optional debug draw to show fixed baseline.
+            """
+            from klibs.KLEnvironment import txtm
+
+            # -------------------------
+            # NEW: toggle to visually confirm the anchor never moves
+            # -------------------------
+            DEBUG_BASELINE = False  # NEW (set True temporarily)
+
+            if anonymous:
+                try:
+                    eval_statement = re.match(re.compile(u"^EVAL:[ ]*(.*)$"), query_ob.anonymous_value)
+                    if eval_statement:
+                        query_ob.anonymous_value = eval(eval_statement.group(1))
+                except TypeError:
+                    pass
+                return query_ob.anonymous_value
+
+            f = query_ob.format
+            if f.type not in ("int", "float", "str", "bool", None):
+                raise ValueError("Invalid data type for query '{0}': {1}".format(query_ob.title, f.type))
+
+            if f.styles == 'default':
+                f.styles = AttributeDict({'query': 'default', 'input': 'default', 'error': 'alert'})
+
+            # Render prompt once
+            add_text_style(label="query_text", size=10)
+            q_text = message(query_ob.query, f.styles.query, align='center', blit_txt=False)
+
+            # -------------------------
+            # NEW: define fixed layout constants (do not store in f.positions)
+            # -------------------------
+            Q_LOC = [P.screen_c[0], int(0.1 * P.screen_y)]          # NEW
+            Q_REG = BL_TOP                                         # NEW
+
+            INPUT_X = int(P.screen_x * 0.52)                       # NEW
+            INPUT_W = int(P.screen_x * 0.45)                       # NEW
+
+            font_q = txtm.styles[f.styles.query]
+            v_pad = q_text.height + int(0.5 * font_q.line_space * font_q.size_px)
+
+            IN_LOC = [INPUT_X, Q_LOC[1] + v_pad]                   # NEW
+            IN_REG = BL_TOP_LEFT                                   # NEW
+            ERR_LOC = [INPUT_X, Q_LOC[1] + v_pad]                  # NEW
+            ERR_REG = BL_TOP_LEFT                                  # NEW
+
+            # -------------------------
+            # Accepted/range parsing (unchanged)
+            # -------------------------
+            accepted_responses = query_ob.accepted
+            invalid_answer_str = None
+            try:
+                if accepted_responses:
+                    try:
+                        iter(accepted_responses)
+                        accepted_str = pretty_list(accepted_responses)
+                        invalid_answer_str = default_strings['invalid_answer'].format(accepted_str)
+                    except:
+                        raise TypeError("The 'accepted' key of a question must be a list of values.")
+                elif f.range:
+                    if f.type not in ("int", "float"):
+                        raise ValueError("Only queries with numeric types can use the range parameter.")
+                    elif isinstance(f.range, list) == False or len(f.range) != 2:
+                        raise TypeError("Query ranges must be two-item lists.")
+                    template = default_strings.get('out_of_range', "Your answer must be a number between {0} and {1}, inclusive.")
+                    invalid_answer_str = template.format(f.range[0], f.range[1])
+            except:
+                cso("\n<red>Error encountered while parsing query '{0}':</red>".format(query_ob.title))
+                raise
+
+            input_string = u''
+            error_string = None
+            user_finished = False
+            rendered_input = None
+
+            # -------------------------
+            # NEW: incremental display lines (prevents retroactive reflow)
+            # -------------------------
+            disp_lines = [""]  # NEW
+
+            def _append_disp_char(ch_disp):  # NEW
+                nonlocal disp_lines
+                add_text_style(label="query_text", size=10)
+                candidate = disp_lines[-1] + ch_disp
+                cand_obj = message(candidate, style = "query_text", align="left", blit_txt=False)
+                if cand_obj.width <= INPUT_W:
+                    disp_lines[-1] = candidate
+                else:
+                    disp_lines.append(ch_disp)
+
+            flush()
+            SDL_StartTextInput()
+
+            while not user_finished:
+
+                for event in pump(False):
+                    if event.type == SDL_KEYDOWN:
+
+                        error_string = None
+                        ui_request(event.key.keysym)
+                        sdl_keysym = event.key.keysym.sym
+
+                        if sdl_keysym == SDLK_ESCAPE:
+                            input_string = ""
+                            disp_lines = [""]  # NEW
+
+                        elif sdl_keysym == SDLK_SPACE:
+                            input_string += " "
+                            _append_disp_char("*" if f.password else " ")  # NEW
+
+                        elif sdl_keysym in (SDLK_KP_ENTER, SDLK_RETURN):
+                            if len(input_string) > 0:
+                                response = input_string
+                                if f.type == "int":
+                                    try:
+                                        response = int(input_string)
+                                    except ValueError:
+                                        error_string = "Please respond with an integer."
+                                elif f.type == "float":
+                                    try:
+                                        response = float(input_string)
+                                    except ValueError:
+                                        error_string = "Please respond with a number."
+                                if not error_string:
+                                    if accepted_responses:
+                                        user_finished = response in accepted_responses
+                                        if not user_finished:
+                                            error_string = invalid_answer_str
+                                    elif f.range:
+                                        user_finished = (f.range[0] <= response <= f.range[1])
+                                        if not user_finished:
+                                            error_string = invalid_answer_str
+                                    else:
+                                        user_finished = True
+                            elif query_ob.allow_null is True:
+                                user_finished = True
+                            else:
+                                error_string = default_strings['answer_not_supplied']
+
+                    elif event.type == SDL_TEXTINPUT:
+                        raw = event.text.text 
+
+                        if isinstance(raw, bytes): 
+                            typed = raw.decode("utf-8", errors = "ignore")
+                        else:
+                            typed = raw
+                        
+                        if f.case_sensitive is False:
+                            typed = typed.lower()
+                        
+                        input_string += typed
+                        for ch in typed: 
+                            _append_disp_char("*" if f.password else ch)
+
+
+                # Render
+                if error_string:
+                    rendered_input = message(error_string, f.styles.error, align="left", blit_txt=False)
+                    input_string = ""
+                    disp_lines = [""]
+                else:
+                    
+                    disp = "\n".join(disp_lines).rstrip("\n")
+                    rendered_input = message(disp, style = "query_text", align="left", blit_txt=False) if disp else None
+
+                # Draw
+                fill()
+                if callable(draw_left_fn):
+                    draw_left_fn()
+                if callable(draw_timer_fn):
+                    draw_timer_fn()
+
+                blit(q_text, Q_REG, Q_LOC)
+
+                if DEBUG_BASELINE:  # NEW (optional)
+                    # draw a small marker where the input is anchored
+                    kld.Circle(IN_LOC, 6, fill=True)
+
+                if rendered_input:
+                    if error_string:
+                        blit(rendered_input, ERR_REG, ERR_LOC)
+                    else:
+                        blit(rendered_input, IN_REG, IN_LOC)
+
+                flip()
+
+            fill()
+            flip()
+            SDL_StopTextInput()
+
+            # Return parsing (unchanged)
+            if query_ob.allow_null and len(input_string) == 0:
+                return None
+            elif f.type == "int":
+                return int(input_string)
+            elif f.type == "str":
+                if f.action == QUERY_ACTION_HASH:
+                    return make_hash(input_string)
+                elif f.action == QUERY_ACTION_UPPERCASE:
+                    return utf8(input_string).upper()
+                else:
+                    return utf8(input_string)
+            elif f.type == "float":
+                return float(input_string)
+            elif f.type == "bool":
+                return input_string in f.accept_as_true
+            else:
+                return input_string
+            
         # Helper function for centering queries
         def centre_query(q, y_offset_query=-60, y_offset_input=200, y_offset_error=90):
             cx, cy = P.screen_c
