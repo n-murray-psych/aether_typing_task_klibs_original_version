@@ -383,7 +383,7 @@ class aether_typing_study_experiment(klibs.Experiment):
                 timer_x = int(P.screen_x * 0.75)
                 timer_y = int(P.screen_y * 0.07)
 
-                erase_w, erase_h = 300, 80
+                erase_w, erase_h = 100, 45
                 eraser = Rectangle(erase_w, erase_h, fill=(176, 0, 0))
                 blit(eraser, 5, (timer_x, timer_y))
 
