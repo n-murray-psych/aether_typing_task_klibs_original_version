@@ -68,24 +68,19 @@ class aether_typing_study_experiment(klibs.Experiment):
             # -------------------------
             # NEW: define fixed layout constants (do not store in f.positions)
             # -------------------------
-            Q_LOC = [P.screen_c[0], int(0.1 * P.screen_y)]   # prompt stays near top
-            Q_REG = BL_TOP
+            Q_LOC = [P.screen_c[0], int(0.1 * P.screen_y)]          # NEW
+            Q_REG = BL_TOP                                         # NEW
 
-            INPUT_X = int(P.screen_x * 0.52)                 # keep X as-is (right side)  # CHANGED (comment only)
-            INPUT_W = int(P.screen_x * 0.45)
+            INPUT_X = int(P.screen_x * 0.52)                       # NEW
+            INPUT_W = int(P.screen_x * 0.45)                       # NEW
 
             font_q = txtm.styles[f.styles.query]
             v_pad = q_text.height + int(0.5 * font_q.line_space * font_q.size_px)
 
-            # We still define nominal input/error locations for their X, but
-            # Y will be dynamically re-centered every frame.               # CHANGED (comment)
-            IN_LOC = [INPUT_X, Q_LOC[1] + v_pad]
-            IN_REG = BL_TOP_LEFT
-            ERR_LOC = [INPUT_X, Q_LOC[1] + v_pad]
-            ERR_REG = BL_TOP_LEFT
-
-            # Shared vertical center for left text and input text           # CHANGED
-            BAND_CENTER_Y = P.screen_c[1]                                  # CHANGED
+            IN_LOC = [INPUT_X, Q_LOC[1] + v_pad]                   # NEW
+            IN_REG = BL_TOP_LEFT                                   # NEW
+            ERR_LOC = [INPUT_X, Q_LOC[1] + v_pad]                  # NEW
+            ERR_REG = BL_TOP_LEFT                                  # NEW
 
             # -------------------------
             # Accepted/range parsing (unchanged)
@@ -125,7 +120,7 @@ class aether_typing_study_experiment(klibs.Experiment):
                 nonlocal disp_lines
                 add_text_style(label="query_text", size=16)
                 candidate = disp_lines[-1] + ch_disp
-                cand_obj = message(candidate, style="query_text", align="left", blit_txt=False)
+                cand_obj = message(candidate, style = "query_text", align="left", blit_txt=False)
                 if cand_obj.width <= INPUT_W:
                     disp_lines[-1] = candidate
                 else:
@@ -181,19 +176,20 @@ class aether_typing_study_experiment(klibs.Experiment):
                                 error_string = default_strings['answer_not_supplied']
 
                     elif event.type == SDL_TEXTINPUT:
-                        raw = event.text.text
+                        raw = event.text.text 
 
-                        if isinstance(raw, bytes):
-                            typed = raw.decode("utf-8", errors="ignore")
+                        if isinstance(raw, bytes): 
+                            typed = raw.decode("utf-8", errors = "ignore")
                         else:
                             typed = raw
-
+                        
                         if f.case_sensitive is False:
                             typed = typed.lower()
-
+                        
                         input_string += typed
-                        for ch in typed:
+                        for ch in typed: 
                             _append_disp_char("*" if f.password else ch)
+
 
                 # Render
                 if error_string:
@@ -201,8 +197,9 @@ class aether_typing_study_experiment(klibs.Experiment):
                     input_string = ""
                     disp_lines = [""]
                 else:
+                    
                     disp = "\n".join(disp_lines).rstrip("\n")
-                    rendered_input = message(disp, style="query_text", align="left", blit_txt=False) if disp else None
+                    rendered_input = message(disp, style = "query_text", align="left", blit_txt=False) if disp else None
 
                 # Draw
                 fill()
@@ -213,26 +210,16 @@ class aether_typing_study_experiment(klibs.Experiment):
 
                 blit(q_text, Q_REG, Q_LOC)
 
-                if DEBUG_BASELINE:
-                    # draw a small marker at the nominal X for the input field
+                if DEBUG_BASELINE:  # NEW (optional)
+                    # draw a small marker where the input is anchored
                     kld.Circle(IN_LOC, 6, fill=True)
 
                 if rendered_input:
-                    # -------------------------
-                    # NEW: vertically center the input/error block on BAND_CENTER_Y
-                    # while keeping the original X positions unchanged.
-                    # -------------------------                                     # CHANGED
-                    block_h = rendered_input.height                                 # CHANGED
-                    top_y = BAND_CENTER_Y - block_h // 2                            # CHANGED
-
                     if error_string:
-                        loc = [ERR_LOC[0], top_y]                                   # keep error X, new Y
-                        reg = ERR_REG
+                        blit(rendered_input, ERR_REG, ERR_LOC)
                     else:
-                        loc = [IN_LOC[0], top_y]                                    # keep input X, new Y
-                        reg = IN_REG
+                        blit(rendered_input, IN_REG, IN_LOC)
 
-                    blit(rendered_input, reg, loc)                                  # CHANGED
                 flip()
 
             fill()
@@ -256,8 +243,8 @@ class aether_typing_study_experiment(klibs.Experiment):
             elif f.type == "bool":
                 return input_string in f.accept_as_true
             else:
-                return input_string  
-                      
+                return input_string
+            
         # Helper function for centering queries
         def centre_query(q, y_offset_query=-60, y_offset_input=200, y_offset_error=90):
             cx, cy = P.screen_c
