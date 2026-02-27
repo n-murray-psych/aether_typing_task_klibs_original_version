@@ -131,6 +131,10 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             while not user_finished:
 
+                if hasattr(self, "timer") and self.timer.remaining() <= 0:
+                    user_finished = True
+                    continue
+
                 for event in pump(False):
                     if event.type == SDL_KEYDOWN:
 
