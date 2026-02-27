@@ -317,11 +317,11 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             any_key()  # wait specifically for SPACE
 
-            add_text_style(label = "timer_text", size = 24)
+            add_text_style(label = "timer_text", size=20)
 
             # Ensure a large text style for the practice banner (only defined once)
             if not hasattr(self, "_practice_style_defined"):
-                add_text_style(label="practice_banner", size=24)
+                add_text_style(label="practice_banner", size=20)
                 self._practice_style_defined = True
 
             # Left column text
@@ -595,7 +595,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # Ensure style for practice banner
             if not hasattr(self, "_practice_style_defined"):
-                add_text_style(label="practice_banner", size=48)
+                add_text_style(label="practice_banner", size=20)
                 self._practice_style_defined = True
 
             # Is this the practice sequence?
@@ -754,7 +754,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             # Ensure style for practice banner
             if not hasattr(self, "_practice_style_defined"):
-                add_text_style(label="practice_banner", size=48)
+                add_text_style(label="practice_banner", size=20)
                 self._practice_style_defined = True
 
             # Is this the practice word list?
