@@ -13,11 +13,21 @@ from klibs.KLTime import CountDown
 from klibs.KLEventQueue import pump, flush
 from klibs.KLGraphics.KLDraw import Rectangle
 from klibs.KLResponseCollectors import CursorResponse 
-from klibs.KLConstants import TK_MS
+from klibs.KLConstants import TK_MS, BL_TOP_LEFT, BL_TOP
 from klibs.KLBoundary import RectangleBoundary, BoundarySet
 import itertools
 import random
 from klibs.KLText import add_text_style
+from klibs import P
+from klibs.KLConstants import BL_TOP, BL_TOP_LEFT, BL_CENTER, QUERY_ACTION_HASH, QUERY_ACTION_UPPERCASE
+from klibs.KLJSON_Object import AttributeDict
+from klibs.KLCommunication import message, ui_request
+from klibs.KLUtilities import pretty_list, utf8, make_hash
+from sdl2 import (
+    SDL_StartTextInput, SDL_StopTextInput,
+    SDL_KEYDOWN, SDL_TEXTINPUT,
+    SDLK_ESCAPE, SDLK_SPACE, SDLK_RETURN, SDLK_KP_ENTER
+)
 
 class aether_typing_study_experiment(klibs.Experiment):
 
