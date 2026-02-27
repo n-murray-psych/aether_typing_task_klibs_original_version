@@ -62,7 +62,7 @@ class aether_typing_study_experiment(klibs.Experiment):
                 f.styles = AttributeDict({'query': 'default', 'input': 'default', 'error': 'alert'})
 
             # Render prompt once
-            add_text_style(label="query_text", size=16)
+            add_text_style(label="query_text", size=14)
             q_text = message(query_ob.query, f.styles.query, align='center', blit_txt=False)
 
             # -------------------------
@@ -118,7 +118,7 @@ class aether_typing_study_experiment(klibs.Experiment):
 
             def _append_disp_char(ch_disp):  # NEW
                 nonlocal disp_lines
-                add_text_style(label="query_text", size=16)
+                add_text_style(label="query_text", size=14)
                 candidate = disp_lines[-1] + ch_disp
                 cand_obj = message(candidate, style = "query_text", align="left", blit_txt=False)
                 if cand_obj.width <= INPUT_W:
