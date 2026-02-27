@@ -192,8 +192,8 @@
         {
             "title": "survey1", 
             "database_field": "survey1", 
-            "query": "What technology have you used for typewriting in English in the last year? \n \n Please type your response. \n\n 1: Mechanical/membrane keyboard \n 2: On-screen keyboard \n 3: Other (specify)", 
-            "accepted": null,
+            "query": "Have you used a mechanical/membrane keyboard for typewriting in English in the last year? \n Press the 'y' key for 'yes', or the 'n' key for 'no'.", 
+            "accepted": ["y", "n"],
             "allow_null": false, 
             "format": {
                 "type": "str", 
@@ -213,8 +213,8 @@
         {
             "title": "survey2", 
             "database_field": "survey2", 
-            "query": "What is your most used keyboard layout for typewriting in English in the past year using this technology? \n Please type your response. \n\n 1: AZERTY \n 2: Colemak \n 3: Dvorak \n 4: QWERTY \n 5: Workman \n 6: Other (specify)", 
-            "accepted": null,
+            "query": "What is your most used keyboard layout for typewriting in English in the past year using this technology? \n Enter the letter corresponding to the answer you chose. \n\n a) AZERTY \n b) Colemak \n c) Dvorak \n d) QWERTY \n e) Workman \n f) Other", 
+            "accepted": ["a", "b", "c", "d", "e", "f"],
             "allow_null": false, 
             "format": {
                 "type": "str", 
@@ -234,7 +234,7 @@
         {
             "title": "survey3", 
             "database_field": "survey3", 
-            "query": "How often have you engaged in typewriting in English in the past year using this technology? \n Please type your response. \n\n 1: Daily or Almost Daily \n 2: Weekly or Almost Weekly \n 3: Monthly or Almost Monthly \n 4: Never or Almost Never", 
+            "query": "You selected 'Other'. Please specify which keyboard layout you used the most in the last year for typewriting in English using a mechanical/membrane keyboard.", 
             "accepted": null,
             "allow_null": false, 
             "format": {
@@ -255,8 +255,260 @@
         {
             "title": "survey4", 
             "database_field": "survey4", 
-            "query": "How often have you touch-typed in English in the past year using this technology? \n Please type your response. \n\n 1: Daily or Almost Daily \n 2: Weekly or Almost Weekly \n 3: Monthly or Almost Monthly \n 4: Never or Almost Never", 
+            "query": "How many hours per week have you engaged in typewriting in English in the last year using a mechanical/membrane keyboard? Please type your answer.", 
             "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey5": [
+        {
+            "title": "survey5", 
+            "database_field": "survey5", 
+            "query": "What percentage of the time have you looked at the keyboard in the last year using a mechanical/membrane keyboard? \n a) 0-10% \n b) 11-20% \n c) 21-30% \n d) 31-40% \n e) 41-50% \n f) 51-60% \n g) 61-70% \n h) 71-80% \n i) 81-90% \n j) 91-100%",
+            "accepted": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey6": [
+        {
+            "title": "survey6", 
+            "database_field": "survey6", 
+            "query": "Have you used an on-screen keyboard for typewriting in English in the last year? \n Press the 'y' key for 'yes', or the 'n' key for 'no'.", 
+            "accepted": ["y", "n"],
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey7": [
+        {
+            "title": "survey7", 
+            "database_field": "survey7", 
+            "query": "What is your most used keyboard layout for typewriting in English in the past year using this technology? \n Enter the letter corresponding to the answer you chose. \n\n a) AZERTY \n b) Colemak \n c) Dvorak \n d) QWERTY \n e) Workman \n f) Other", 
+            "accepted": ["a", "b", "c", "d", "e", "f"],
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey8": [
+        {
+            "title": "survey8", 
+            "database_field": "survey8", 
+            "query": "You selected 'Other'. Please specify which keyboard layout you used the most in the last year for typewriting in English using an on-screen keyboard.", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey9": [
+        {
+            "title": "survey9", 
+            "database_field": "survey9", 
+            "query": "How many hours per week have you engaged in typewriting in English in the last year using an on-screen keyboard? Please type your answer.", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey10": [
+        {
+            "title": "survey10", 
+            "database_field": "survey10", 
+            "query": "What percentage of the time have you looked at the keyboard in the last year using an on-screen keyboard? \n a) 0-10% \n b) 11-20% \n c) 21-30% \n d) 31-40% \n e) 41-50% \n f) 51-60% \n g) 61-70% \n h) 71-80% \n i) 81-90% \n j) 91-100%",
+            "accepted": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey11": [
+        {
+            "title": "survey11", 
+            "database_field": "survey11", 
+            "query": "Please specify what type of keyboard other than a mechanical/membrane keyboard or an on-screen keyboard you have used for typewriting in English in the last year.", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey12": [
+        {
+            "title": "survey12", 
+            "database_field": "survey12", 
+            "query": "Is there any type of keyboard other than a mechanical/membrane or an on-screen keyboard you have used for typewriting in English in the last year? \n Press the 'y' key for 'yes', or the 'n' key for 'no'.", 
+            "accepted": ["y", "n"],
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey13": [
+        {
+            "title": "survey13", 
+            "database_field": "survey13", 
+            "query": "What is your most used keyboard layout for typewriting in English in the past year using this technology? \n Enter the letter corresponding to the answer you chose. \n\n a) AZERTY \n b) Colemak \n c) Dvorak \n d) QWERTY \n e) Workman \n f) Other", 
+            "accepted": ["a", "b", "c", "d", "e", "f"],
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey14": [
+        {
+            "title": "survey14", 
+            "database_field": "survey14", 
+            "query": "You selected 'Other'. Please specify which keyboard layout you used the most in the last year for typewriting in English using this technology.", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey15": [
+        {
+            "title": "survey15", 
+            "database_field": "survey15", 
+            "query": "How many hours per week have you engaged in typewriting in English in the last year using this technology? Please type your answer.", 
+            "accepted": null,
+            "allow_null": false, 
+            "format": {
+                "type": "str", 
+                "styles": "default", 
+                "positions": "default", 
+                "password": false, 
+                "range": null, 
+                "case_sensitive": true, 
+                "accept_as_true": null, 
+                "action": null
+            }, 
+            "anonymous_value": "n", 
+            "active": true
+        }
+    ],
+    "survey16": [
+        {
+            "title": "survey16", 
+            "database_field": "survey16", 
+            "query": "What percentage of the time have you looked at the keyboard in the last year using this technology? \n a) 0-10% \n b) 11-20% \n c) 21-30% \n d) 31-40% \n e) 41-50% \n f) 51-60% \n g) 61-70% \n h) 71-80% \n i) 81-90% \n j) 91-100%",
+            "accepted": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
             "allow_null": false, 
             "format": {
                 "type": "str", 
