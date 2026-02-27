@@ -402,8 +402,8 @@
         {
             "title": "survey11", 
             "database_field": "survey11", 
-            "query": "Please specify what type of keyboard other than a mechanical/membrane keyboard or an on-screen keyboard you have used for typewriting in English in the last year.", 
-            "accepted": null,
+            "query": "Is there any type of keyboard other than a mechanical/membrane or an on-screen keyboard you have used for typewriting in English in the last year? \n Press the 'y' key for 'yes', or the 'n' key for 'no'.", 
+            "accepted": ["y", "n"],
             "allow_null": false, 
             "format": {
                 "type": "str", 
@@ -423,8 +423,8 @@
         {
             "title": "survey12", 
             "database_field": "survey12", 
-            "query": "Is there any type of keyboard other than a mechanical/membrane or an on-screen keyboard you have used for typewriting in English in the last year? \n Press the 'y' key for 'yes', or the 'n' key for 'no'.", 
-            "accepted": ["y", "n"],
+            "query": "Please specify what type of keyboard other than a mechanical/membrane keyboard or an on-screen keyboard you have used for typewriting in English in the last year.", 
+            "accepted": null,
             "allow_null": false, 
             "format": {
                 "type": "str", 

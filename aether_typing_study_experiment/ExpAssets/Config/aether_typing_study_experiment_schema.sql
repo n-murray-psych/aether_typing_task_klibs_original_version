@@ -123,6 +123,21 @@ CREATE TABLE trials (
     survey1 text not null,
     survey2 text not null,
     survey3 text not null,
-    survey4 text not null
+    survey4 text not null,
+
+    survey5 text not null,
+    survey6 text not null,
+    survey7 text not null,
+    survey8 text not null,
+
+    survey9 text not null,
+    survey10 text not null,
+    survey11 text not null,
+    survey12 text not null,
+
+    survey13 text not null,
+    survey14 text not null,
+    survey15 text not null,
+    survey16 text not null
 
 );

@@ -1957,21 +1957,96 @@ class aether_typing_study_experiment(klibs.Experiment):
         # Survey question queries
         ###############################################################
 
+        survey1 = ""
+        survey2 = ""
+        survey3 = ""
+        survey4 = ""
+        survey5 = ""
+        survey6 = ""
+        survey7 = ""
+        survey8 = ""
+        survey9 = ""
+        survey10 = ""
+        survey11 = ""
+        survey12 = ""
+        survey13 = ""
+        survey14 = ""
+        survey15 = ""
+        survey16 = ""
+
         q = user_queries.survey1[0]
         self.centre_query(q)
         survey1 = query(q)
 
-        q = user_queries.survey2[0]
-        self.centre_query(q)
-        survey2 = query(q)
+        if survey1 == "y":
+            
+            q = user_queries.survey2[0]
+            self.centre_query(q)
+            survey2 = query(q)
 
-        q = user_queries.survey3[0]
-        self.centre_query(q)
-        survey3 = query(q)
+            if survey2 == "f":
+                q = user_queries.survey3[0]
+                self.centre_query(q)
+                survey3 = query(q)
 
-        q = user_queries.survey4[0]
+            q = user_queries.survey4[0]
+            self.centre_query(q)
+            survey4 = query(q)
+
+            q = user_queries.survey5[0]
+            self.centre_query(q)
+            survey5 = query(q)
+
+        q = user_queries.survey6[0]
         self.centre_query(q)
-        survey4 = query(q)
+        survey6 = query(q)
+
+        if survey6 == "y":
+            
+            q = user_queries.survey7[0]
+            self.centre_query(q)
+            survey7 = query(q)
+
+            if survey7 == "f":
+                q = user_queries.survey8[0]
+                self.centre_query(q)
+                survey8 = query(q)
+
+            q = user_queries.survey9[0]
+            self.centre_query(q)
+            survey9 = query(q)
+
+            q = user_queries.survey10[0]
+            self.centre_query(q)
+            survey10 = query(q)
+
+        q = user_queries.survey11[0]
+        self.centre_query(q)
+        survey11 = query(q)
+        
+        if survey11 == "y": 
+
+            q = user_queries.survey12[0]
+            self.centre_query(q)
+            survey12 = query(q)
+
+            q = user_queries.survey13[0]
+            self.centre_query(q)
+            survey13 = query(q)
+
+            if survey13 == "f":
+                q = user_queries.survey14[0]
+                self.centre_query(q)
+                survey14 = query(q)
+
+            q = user_queries.survey15[0]
+            self.centre_query(q)
+            survey15 = query(q)
+
+            q = user_queries.survey16[0]
+            self.centre_query(q)
+            survey13 = query(q)
+
 
 ########################################################   
         # ---- DATA UNPACKING / SAFETY ----
@@ -2133,7 +2208,22 @@ class aether_typing_study_experiment(klibs.Experiment):
             "survey1": survey1, 
             "survey2": survey2, 
             "survey3": survey3, 
-            "survey4": survey4
+            "survey4": survey4, 
+
+            "survey5": survey5, 
+            "survey6": survey6, 
+            "survey7": survey7, 
+            "survey8": survey8, 
+
+            "survey9": survey9, 
+            "survey10": survey10, 
+            "survey11": survey11, 
+            "survey12": survey12, 
+
+            "survey13": survey13, 
+            "survey14": survey14, 
+            "survey15": survey15, 
+            "survey16": survey16
 
         }
     
